@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-	before_action :set_user, only: [:show, :edit, :update, :destroy]
+	before_action :set_user, only: [:show, :edit, :update, :destroy, :following, :followers]
 
 	def show
 		@posts = @user.posts
@@ -23,6 +23,16 @@ class UsersController < ApplicationController
 
 	def destroy
 	end
+
+    def following
+    	@users = @user.followings
+    	render 'show_follow'
+    end
+
+    def followers
+    	@users = @user.followers
+    	render 'show_follower'
+    end
 
 	private
 

@@ -15,6 +15,14 @@
 			<% end %>
 			<%= @user.user_name %>
 
+			<!-- フォロー／フォロワー数 -->
+		    <section class="stats">
+		      <%= render 'stats' %>
+		    </section>
+
+		    <!-- フォロー用フォーム -->
+    		<%= render 'follow_form' %>
+
 			<br>
 			<%= link_to "ユーザ編集", edit_user_path(current_user.id) %>
 			<br>
@@ -23,6 +31,7 @@
 			<br>
 			<br>
 
+			<!-- ユーザの投稿 -->
 			<div class="col-md-4">
 				<% @posts.each do |post| %>
 					<% if post.images.attached? %>
