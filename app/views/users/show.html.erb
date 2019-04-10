@@ -9,9 +9,9 @@
 			<br>
 			<br>
 			<% if @user.image.attached? %>
-				<%= image_tag @user.image.variant(resize:"200x200").processed %>
+				<%= image_tag @user.image.variant(resize:"200x200").processed, class: "profile-image" %>
 			<% else %>
-			    <%= image_tag("no_image.jpg", :size => "200x200") %>
+			    <%= image_tag("no_image.jpg", size: "200x200") %>
 			<% end %>
 			<%= @user.user_name %>
 
@@ -42,7 +42,7 @@
 				    	<% end %>
 					<% else %>
 						<%= link_to post_path(post.id) do %>
-							<%= image_tag("no_image.jpg", :size => "200x200") %>
+							<%= image_tag("no_image.jpg", size: "200x200") %>
 						<% end %>
 					<% end %>
 					<%= post.title %>
@@ -52,3 +52,9 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	.profile-image {
+		border-radius: 100px
+	}
+</style>
