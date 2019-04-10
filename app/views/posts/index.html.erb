@@ -7,10 +7,14 @@
 
 				<% if post.images.attached? %>
 				  <% post.images.each do |image| %>
-				    <%= image_tag image.variant(resize: "200x200") %> <br>
+				    <%= link_to post_path(post.id) do %>
+				    	<%= image_tag image.variant(resize: "200x200") %> <br>
+				    <% end %>
 				  <% end %>
 				<% else %>
-					<%= image_tag("no_image.jpg", size: "200x200") %>
+					<%= link_to post_path(post.id) do %>
+						<%= image_tag("no_image.jpg", size: "200x200") %>
+					<% end %>
 				<% end %>
 
 				<%= post.title %>

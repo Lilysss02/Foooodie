@@ -1,5 +1,5 @@
 <!-- フォローボタンの表示 -->
 <%= form_for(current_user.following_relationships.build(following_id: @user.id)) do |f| %>
   <div><%= f.hidden_field :following_id %></div>
-  <%= f.submit "Follow", class: "btn btn-large btn-primary follow-btn" %>
+  <%= f.submit "Follow", class: "btn btn-sm btn-primary" %>
 <% end %>
