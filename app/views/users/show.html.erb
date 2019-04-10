@@ -9,11 +9,19 @@
 			<br>
 			<br>
 			<% if @user.image.attached? %>
-				<%= image_tag @user.image.variant(resize:"200x200").processed %>
+				<%= image_tag @user.image.variant(resize:"200x200").processed, class: "profile-image" %>
 			<% else %>
-			    <%= image_tag("no_image.jpg", :size => "200x200") %>
+			    <%= image_tag("no_image.jpg", size: "200x200") %>
 			<% end %>
 			<%= @user.user_name %>
+
+			<!-- フォロー／フォロワー数 -->
+		    <section class="stats">
+		      <%= render 'stats' %>
+		    </section>
+
+		    <!-- フォロー用フォーム -->
+    		<%= render 'follow_form' %>
 
 			<br>
 			<%= link_to "ユーザ編集", edit_user_path(current_user.id) %>
@@ -23,6 +31,7 @@
 			<br>
 			<br>
 
+			<!-- ユーザの投稿 -->
 			<div class="col-md-4">
 				<% @posts.each do |post| %>
 					<% if post.images.attached? %>
@@ -33,7 +42,7 @@
 				    	<% end %>
 					<% else %>
 						<%= link_to post_path(post.id) do %>
-							<%= image_tag("no_image.jpg", :size => "200x200") %>
+							<%= image_tag("no_image.jpg", size: "200x200") %>
 						<% end %>
 					<% end %>
 					<%= post.title %>
@@ -43,3 +52,9 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	.profile-image {
+		border-radius: 100px
+	}
+</style>

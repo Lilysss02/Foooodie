@@ -16,7 +16,7 @@
           <a class="navbar-brand" href="#">Portfolio</a>
         </div>
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Home</a></li>
+          <li><%= link_to "Home", root_path %></li>
           <% if user_signed_in? %>
             <li><%= link_to "MyPage", user_path(current_user) %></li>
             <li><%= link_to "LogOut", destroy_user_session_path, method: :delete %></li>
