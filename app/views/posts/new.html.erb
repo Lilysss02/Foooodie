@@ -13,6 +13,8 @@
                 <div  class="field">
                 	<label>レポート写真</label>
                 	<%= f.file_field :images, multiple: true, class: "file-input", id: :imgInp %>
+                    <output id="list"></output>
+                    <!-- <div class="preview" /> -->
                 </div>
                 <br>
 
@@ -21,9 +23,7 @@
                 		<%= image_tag image.variant(resize: "200x200") %>
                 	<% end %>
                 <% end %>
-                <img id="imgPre" src="#" alt="your image" />
                 <br>
-
             	  <label>タイトル</label>
             	  <%= f.text_field :title %><br>
             	  <label>本文</label>
@@ -38,18 +38,61 @@
 </div>
 
 <script>
-$(function() {
- function readURL(input) {
-   if (input.files && input.files[0]) {
-     var reader = new FileReader();
-     reader.onload = function (e) {
-       $('#imgPre').attr('src', e.target.result);
-     }
-     reader.readAsDataURL(input.files[0]);
-   }
- }
- $("#imgInp").change(function(){
-   readURL(this);
- });
-});
+document.getElementById('imgInp').onchange = function(event) {
+    initializeFiles();
+
+    var files = event.target.files;
+
+    for (var i = 0, f; f = files[i]; i++) {
+        var reader = new FileReader();
+        reader.readAsDataURL(f);
+
+        reader.onload = (function(theFile) {
+            return function(e) {
+                var div = document.createElement('div');
+                div.className = 'reader_file';
+                div.innerHTML = '<div class="reader_title">' + encodeURIComponent(theFile.name) + '</div>';
+                div.innerHTML += '<img class="reader_image" src="' + e.target.result + '" width="150px" />';
+                document.getElementById('list').insertBefore(div, null);
+            }
+        })(f);
+    }
+};
+
+function initializeFiles() {
+    document.getElementById('list').innerHTML = '';
+}
+
+
+// $(function(){
+//   //画像ファイルプレビュー表示のイベント追加 fileを選択時に発火するイベントを登録
+//   $('form').on('change', 'input[type="file"]', function(e) {
+//     var file = e.target.files[0],
+//         reader = new FileReader(),
+//         $preview = $(".preview");
+//         t = this;
+
+//     // 画像ファイル以外の場合は何もしない
+//     if(file.type.indexOf("image") < 0){
+//       return false;
+//     }
+
+//     // ファイル読み込みが完了した際のイベント登録
+//     reader.onload = (function(file) {
+//       return function(e) {
+//         //既存のプレビューを削除
+//         $preview.empty();
+//         // .prevewの領域の中にロードした画像を表示するimageタグを追加
+//         $preview.append($('<img>').attr({
+//                   src: e.target.result,
+//                   width: "150px",
+//                   class: "preview",
+//                   title: file.name
+//               }));
+//       };
+//     })(file);
+
+//     reader.readAsDataURL(file);
+//   });
+// });
 </script>
