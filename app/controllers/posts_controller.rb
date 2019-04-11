@@ -13,7 +13,6 @@ class PostsController < ApplicationController
   end
 
   def create
-    binding.pry
     @post = Post.new(post_params)
     @post.user_id = current_user.id
     if @post.save
@@ -34,7 +33,6 @@ class PostsController < ApplicationController
   end
 
   def update
-    @post.images.detach
     if @post.update(post_params)
       redirect_to post_path(@post.id)
     else
