@@ -4,6 +4,10 @@ class Post < ApplicationRecord
   has_many_attached :images
   has_many :favorites, dependent: :destroy
 
+  def favorited_by?(user)
+    favorites.where(user_id: user.id).exists?
+  end
+
   has_and_belongs_to_many :tags
 
   after_create do

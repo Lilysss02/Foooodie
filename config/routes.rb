@@ -10,9 +10,9 @@ Rails.application.routes.draw do
   resources :relationships, only: [:create, :destroy]
 
   resources :posts do
-  	resource :favorite, only: [:index, :create, :destroy]
+  	resource :favorites, only: [:create, :destroy]
   end
-
+  get 'favorites/index', to: 'favorites#index'
   root 'posts#index'
   get '/posts/hashtag/:name', to:'posts#hashtags'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

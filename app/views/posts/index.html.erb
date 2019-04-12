@@ -20,7 +20,11 @@
 				<br>
 
 				<%= post.title %>
-				<!-- <%= render_with_hashtags(post.body) %> -->
+
+				<!-- お気に入り登録 -->
+				<div id="likes_buttons_<%= post.id %>">
+					<%= render partial: 'favorites/favorite_form', locals: { post: post, favorites: @favorites} %>
+				</div>
 				<br>
 			<% end %>
 		</div>
