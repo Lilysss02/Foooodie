@@ -22,113 +22,11 @@
 				<%= post.title %>
 
 				<!-- お気に入り登録 -->
-				<% if user_signed_in? %>
-					<% if post.favorited_by?(current_user) %>
-						<%= link_to post_favorites_path(post.id), method: :delete, remote: true do %>
-							<i class="glyphicon glyphicon-heart favorite-icon" id="deleteModal" aria-hidden="true" style="color: red";></i>
-						<% end %>
-						<section id="deleteArea" class="modalArea">
-							<div id="deletelBg" class="modalBg"></div>
-							<div class="modalWrapper">
-								<div class="modalContents">
-									<h3>お気に入りから削除しました！</h3>
-							    </div>
-							    <div id="dcloseModal" class="closeModal"> × </div>
-							</div>
-						</section>
-					<% else %>
-						<%= link_to post_favorites_path(post.id), method: :post, remote: true do %>
-							<i class="glyphicon glyphicon-heart-empty delete-icon" id="favoriteModal" aria-hidden="true"></i>
-						<% end %>
-						<section id="favoriteArea" class="modalArea">
-							<div id="favoriteBg" class="modalBg"></div>
-							<div class="modalWrapper">
-								<div class="modalContents">
-									<h3>お気に入りに登録しました！</h3>
-							    </div>
-							    <div id="fcloseModal" class="closeModal"> × </div>
-							</div>
-						</section>
-					<% end %>
-				<% end %>
+				<div id="likes_buttons_<%= post.id %>">
+					<%= render partial: 'favorites/favorite_form', locals: { post: post, favorites: @favorites} %>
+				</div>
 				<br>
 			<% end %>
 		</div>
 	</div>
 </div>
-
-
-<style>
-.delete-icon{
-	color: gray;
-	font-size: 18px;
-}
-.favorite-icon {
-	font-size: 18px;
-}
-
-body {
-	text-align: center;
-}
-
-/* モーダルCSS */
-.modalArea {
-  display: none;
-  position: fixed;
-  z-index: 10; /*ここの数値は調整 */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.modalBg {
-  width: 100%;
-  height: 100%;
-  background-color: rgba(30,30,30,0.9);
-}
-
-.modalWrapper {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform:translate(-50%,-50%);
-  width: 70%;
-  max-width: 500px;
-  padding: 10px 30px;
-  background-color: #fff;
-}
-
-.closeModal {
-  position: absolute;
-  top: 0.5rem;
-  right: 1rem;
-  cursor: pointer;
-}
-</style>
-
-<script>
-$(document).on('turbolinks:load',
-	function() {
-		// お気に入り登録
-		$("body").on("click", ".delete-icon", function(){
-			$("#favoriteArea").fadeIn();
-			$(this).attr("class","glyphicon glyphicon-heart favorite-icon");
-			$(this).css("color", "red");
-		});
-		$('#fcloseModal, #favoriteBg').click(function(){
-	    	$('#favoriteArea').fadeOut();
-	  	});
-
-		// お気に入り削除
-		$("body").on("click", ".favorite-icon", function(){
-			$("#deleteArea").fadeIn();
-			$(this).attr("class","glyphicon glyphicon-heart-empty delete-icon");
-			$(this).css("color", "gray");
-		});
-	  	$('#dcloseModal, #deleteBg').click(function(){
-	    	$('#deleteArea').fadeOut();
-	  	});
-	}
-);
-</script>
