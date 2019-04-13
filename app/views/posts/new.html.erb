@@ -38,31 +38,30 @@
 </div>
 
 <script>
-document.getElementById('imgInp').onchange = function(event) {
-    initializeFiles();
+    document.getElementById('imgInp').onchange = function(event) {
+        initializeFiles();
 
-    var files = event.target.files;
+        var files = event.target.files;
 
-    for (var i = 0, f; f = files[i]; i++) {
-        var reader = new FileReader();
-        reader.readAsDataURL(f);
+        for (var i = 0, f; f = files[i]; i++) {
+            var reader = new FileReader();
+            reader.readAsDataURL(f);
 
-        reader.onload = (function(theFile) {
-            return function(e) {
-                var div = document.createElement('div');
-                div.className = 'reader_file';
-                div.innerHTML = '<div class="reader_title">' + encodeURIComponent(theFile.name) + '</div>';
-                div.innerHTML += '<img class="reader_image" src="' + e.target.result + '" width="150px" />';
-                document.getElementById('list').insertBefore(div, null);
-            }
-        })(f);
+            reader.onload = (function(theFile) {
+                return function(e) {
+                    var div = document.createElement('div');
+                    div.className = 'reader_file';
+                    div.innerHTML = '<div class="reader_title">' + encodeURIComponent(theFile.name) + '</div>';
+                    div.innerHTML += '<img class="reader_image" src="' + e.target.result + '" width="150px" />';
+                    document.getElementById('list').insertBefore(div, null);
+                }
+            })(f);
+        }
+    };
+
+    function initializeFiles() {
+        document.getElementById('list').innerHTML = '';
     }
-};
-
-function initializeFiles() {
-    document.getElementById('list').innerHTML = '';
-}
-
 
 // $(function(){
 //   //画像ファイルプレビュー表示のイベント追加 fileを選択時に発火するイベントを登録
