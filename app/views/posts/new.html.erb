@@ -10,28 +10,32 @@
             <br>
             <div class="images-field clearfix">
                 <%= form_with model: @post, local: true  do |f| %>
-                <div  class="field">
-                	<label>レポート写真</label>
-                	<%= f.file_field :images, multiple: true, class: "file-input", id: :imgInp %>
+                    <label>レポート写真</label>
+                    <%= f.file_field :images, multiple: true, class: "file-input", id: :imgInp %>
                     <output id="list"></output>
-                    <!-- <div class="preview" /> -->
-                </div>
-                <br>
+                    <br>
 
-                <% if @post.images.attached? %>
-                	<% @post.images.each do |image| %>
-                		<%= image_tag image.variant(resize: "200x200") %>
-                	<% end %>
+                    <% if @post.images.attached? %>
+                        <% @post.images.each do |image| %>
+                            <%= image_tag image.variant(resize: "200x200") %>
+                    	<% end %>
+                    <% end %>
+                    <br>
+                    <label>タイトル</label>
+                    <%= f.text_field :title %><br>
+                    <label>本文</label>
+                    <%= f.text_area :body %><br>
+                    <label>価格帯</label>
+                    <%= f.collection_select :price_id, Price.all, :id, :price_range %>
+
+                    <div class="field">
+                        <label>行ったお店</label>
+                        <%= f.radio_button :status, :report %>
+                        <label>行きたいお店</label>
+                        <%= f.radio_button :status, :list %>
+                    </div>
+                    <%= f.submit "投稿" %>
                 <% end %>
-                <br>
-            	  <label>タイトル</label>
-            	  <%= f.text_field :title %><br>
-            	  <label>本文</label>
-            	  <%= f.text_area :body %><br>
-            	  <label>価格帯</label>
-            	  <%= f.collection_select :price_id, Price.all, :id, :price_range %>
-            	  <%= f.submit "投稿" %>
-            	<% end %>
             </div>
         </div>
     </div>

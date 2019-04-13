@@ -3,15 +3,17 @@
 		<label class="tab1_label active" for="tab1">行ったお店</label>
 		<label class="tab2_label" for="tab2">行きたいお店</label>
 	</div>
+
 	<div class="panel_area">
 		<div id="panel1" class="tab_panel active">
-			<p><% @posts.each do |post| %>
-				<% if post.images.attached? %>
-				  	<% post.images.each do |image| %>
-				    	<%= link_to post_path(post.id) do %>
-				    		<%= image_tag image.variant(resize: "200x200")%>
-				    	<% end %>
-				    <% end %>
+			<!-- 行ったお店 -->
+			<% @posts.each do |post| %>
+				<% if post.report? %><% if post.images.attached? %>
+			  		<% post.images.each do |image| %>
+			    		<%= link_to post_path(post.id) do %>
+			    			<%= image_tag image.variant(resize: "200x200")%>
+			    		<% end %>
+			    	<% end %>
 				<% else %>
 					<%= link_to post_path(post.id) do %>
 						<%= image_tag("no_image.jpg", size: "200x200") %>
@@ -19,11 +21,31 @@
 				<% end %>
 				<%= post.title %>
 				<br><br>
-			<% end %></p>
+				<% end %>
+			<% end %>
 		</div>
+
 		<div id="panel2" class="tab_panel">
-			<p>panel2</p>
+			<!-- 行きたいお店 -->
+			<% @posts.each do |post| %>
+				<% if post.list? %>
+					<% if post.images.attached? %>
+			  			<% post.images.each do |image| %>
+			    			<%= link_to post_path(post.id) do %>
+			    				<%= image_tag image.variant(resize: "200x200")%>
+			    			<% end %>
+			    		<% end %>
+					<% else %>
+						<%= link_to post_path(post.id) do %>
+							<%= image_tag("no_image.jpg", size: "200x200") %>
+						<% end %>
+					<% end %>
+					<%= post.title %>
+					<br><br>
+				<% end %>
+			<% end %>
 		</div>
+
 	</div>
 </div>
 
@@ -69,12 +91,15 @@
 		width: 100%;
 		padding: 80px 0;
 		display: none;
-	}
-	.tab_panel p {
 		font-size: 14px;
 		letter-spacing: 1px;
 		text-align: center;
 	}
+/*	.tab_panel p {
+		font-size: 14px;
+		letter-spacing: 1px;
+		text-align: center;
+	}*/
 	.tab_panel.active {
 		display: block;
 	}

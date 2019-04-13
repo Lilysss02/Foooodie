@@ -3,6 +3,7 @@ class Post < ApplicationRecord
   belongs_to :user
   has_many_attached :images
   has_many :favorites, dependent: :destroy
+  enum status: { report: 0, list: 1 }
 
   def favorited_by?(user)
     favorites.where(user_id: user.id).exists?
