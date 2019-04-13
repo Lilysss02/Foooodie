@@ -1,1 +1,21 @@
 <h1>お気に入り</h1>
+
+<% @favorites.each do |favorite| %>
+	<% if favorite.post.images.attached? %>
+		<% favorite.post.images.each do |image| %>
+			<%= link_to post_path(favorite.post.id) do %>
+				<%= image_tag image.variant(resize: "200x200") %> <br>
+			<% end %>
+		<% end %>
+	<% else %>
+		<%= link_to post_path(post.id) do %>
+			<%= image_tag("no_image.jpg", size: "200x200") %>
+		<% end %>
+	<% end %>
+
+	<br>
+	<%= favorite.post.title %>
+	<%= link_to post_favorites_path(post_id: favorite.post.id), method: :delete, data: { confirm: '削除しますか？' } , class: "btn btn-default btn-xs" do %>
+		<i class="delete-icon glyphicon glyphicon-trash" aria-hidden="true"></i>
+	<% end %>
+<% end %>
