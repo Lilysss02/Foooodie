@@ -20,12 +20,27 @@
 
 
 			<div class="col-md-8">
-				<label>タイトル</label>
-				<%= @post.title %>
-				<label>本文</label>
-				<%= render_with_hashtags(@post.body) %>
-			</div>
+				<% if @post.report? %>
+					<div class="status report">行ったお店</div>
+				<% else %>
+					<div class="status list">行きたいお店</div>
+				<% end %>
 
+				<label>タイトル</label>
+				<%= @post.title %><br>
+				<label>本文</label>
+				<%= render_with_hashtags(@post.body) %><br>
+                <label>利用日</label>
+                <%= @post.used_at %><br>
+                <label>店名</label>
+                <%= @post.shop_name %><br>
+                <label>住所</label>
+                <%= @post.shop_address %><br>
+                <label>URL</label>
+                <%= @post.url %><br>
+                <label>価格帯</label>
+                <%= @post.price.price_range %>
+			</div>
 
 			<br>
 			<br>
@@ -43,7 +58,17 @@
 		height: 200px;
 		margin: 5px;
 	}
-	.content {
 
+	.status {
+		color: #fff;
+		border-radius: 10px;
+		width: 120px;
+		text-align: center;
+	}
+	.report {
+		background-color: #c090cc;
+	}
+	.list {
+		background-color: #90c9cc;
 	}
 </style>

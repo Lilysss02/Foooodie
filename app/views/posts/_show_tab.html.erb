@@ -8,19 +8,20 @@
 		<div id="panel1" class="tab_panel active">
 			<!-- 行ったお店 -->
 			<% @posts.each do |post| %>
-				<% if post.report? %><% if post.images.attached? %>
-			  		<% post.images.each do |image| %>
-			    		<%= link_to post_path(post.id) do %>
-			    			<%= image_tag image.variant(resize: "200x200")%>
-			    		<% end %>
-			    	<% end %>
-				<% else %>
-					<%= link_to post_path(post.id) do %>
-						<%= image_tag("no_image.jpg", size: "200x200") %>
+				<% if post.report? %>
+					<% if post.images.attached? %>
+				  		<% post.images.each do |image| %>
+				    		<%= link_to post_path(post.id) do %>
+				    			<%= image_tag image.variant(resize: "200x200")%>
+				    		<% end %>
+				    	<% end %>
+					<% else %>
+						<%= link_to post_path(post.id) do %>
+							<%= image_tag("no_image.jpg", size: "200x200") %>
+						<% end %>
 					<% end %>
-				<% end %>
-				<%= post.title %>
-				<br><br>
+					<%= post.title %>
+					<br><br>
 				<% end %>
 			<% end %>
 		</div>
