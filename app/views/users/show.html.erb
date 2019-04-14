@@ -29,27 +29,9 @@
 			<%= link_to "新規投稿", new_post_path %>
 			<br>
 			<br>
-			<br>
-
-			<!-- ユーザの投稿 -->
-			<div class="col-md-4">
-				<% @posts.each do |post| %>
-					<% if post.images.attached? %>
-				  		<% post.images.each do |image| %>
-				    		<%= link_to post_path(post.id) do %>
-				    			<%= image_tag image.variant(resize: "200x200")%>
-				    		<% end %>
-				    	<% end %>
-					<% else %>
-						<%= link_to post_path(post.id) do %>
-							<%= image_tag("no_image.jpg", size: "200x200") %>
-						<% end %>
-					<% end %>
-					<%= post.title %>
-					<br><br>
-				<% end %>
-			</div>
 		</div>
+		<!-- ユーザの投稿一覧 -->
+		<%= render 'posts/show_tab' %>
 	</div>
 </div>
 

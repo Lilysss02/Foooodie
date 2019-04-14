@@ -85,7 +85,6 @@ $(document).on('turbolinks:load',
 			$("#favoriteArea").fadeIn();
 			$(this).attr("class","glyphicon glyphicon-heart favorite-icon");
 			$(this).css("color", "red");
-			console.log("favorite");
 		});
 		$('#favcloseModal, #favoriteBg').click(function(){
 	    	$('#favoriteArea').fadeOut();
@@ -96,7 +95,6 @@ $(document).on('turbolinks:load',
 			$("#deleteArea").fadeIn();
 			$(this).attr("class","glyphicon glyphicon-heart-empty delete-icon");
 			$(this).css("color", "gray");
-			console.log("delete");
 		});
 	  	$('#delcloseModal, #deleteBg').click(function(){
 	    	$('#deleteArea').fadeOut();

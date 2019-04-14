@@ -1,0 +1,127 @@
+<div class="tab_wrap">
+	<div class="tab_area">
+		<label class="tab1_label active" for="tab1">行ったお店</label>
+		<label class="tab2_label" for="tab2">行きたいお店</label>
+	</div>
+
+	<div class="panel_area">
+		<div id="panel1" class="tab_panel active">
+			<!-- 行ったお店 -->
+			<% @posts.each do |post| %>
+				<% if post.report? %>
+					<% if post.images.attached? %>
+				  		<% post.images.each do |image| %>
+				    		<%= link_to post_path(post.id) do %>
+				    			<%= image_tag image.variant(resize: "200x200")%>
+				    		<% end %>
+				    	<% end %>
+					<% else %>
+						<%= link_to post_path(post.id) do %>
+							<%= image_tag("no_image.jpg", size: "200x200") %>
+						<% end %>
+					<% end %>
+					<%= post.title %>
+					<br><br>
+				<% end %>
+			<% end %>
+		</div>
+
+		<div id="panel2" class="tab_panel">
+			<!-- 行きたいお店 -->
+			<% @posts.each do |post| %>
+				<% if post.list? %>
+					<% if post.images.attached? %>
+			  			<% post.images.each do |image| %>
+			    			<%= link_to post_path(post.id) do %>
+			    				<%= image_tag image.variant(resize: "200x200")%>
+			    			<% end %>
+			    		<% end %>
+					<% else %>
+						<%= link_to post_path(post.id) do %>
+							<%= image_tag("no_image.jpg", size: "200x200") %>
+						<% end %>
+					<% end %>
+					<%= post.title %>
+					<br><br>
+				<% end %>
+			<% end %>
+		</div>
+
+	</div>
+</div>
+
+<style>
+	.tab_wrap {
+		width: 800px;
+		margin: 80px auto;
+	}
+	.tab_area {
+		font-size: 0;
+		padding: 0 55px;
+	}
+	.tab_area label {
+		width: 110px;
+		display: inline-block;
+		padding: 14px 0 12px;
+		color: #fff;
+		background: #90c9cc;
+		text-align: center;
+		font-size: 13px;
+		cursor: pointer;
+		transition: ease 0.2s opacity;
+		border-top-left-radius: 10px;
+		border-top-right-radius: 10px;
+		vertical-align: bottom;
+		transition: ease 0.2s;
+		margin:10px 5px 0;
+	}
+	.tab_area label:hover {
+		opacity: 0.5;
+	}
+	.tab_area label.active {
+		color: #000;
+		opacity: 0.5;
+	}
+	.panel_area {
+		background: #ddd;
+		border-bottom-right-radius: 10px;
+		border-bottom-left-radius: 10px;
+		border-top: 8px solid #d7e9ea;
+	}
+	.tab_panel{
+		width: 100%;
+		padding: 80px 0;
+		display: none;
+		font-size: 14px;
+		letter-spacing: 1px;
+		text-align: center;
+	}
+/*	.tab_panel p {
+		font-size: 14px;
+		letter-spacing: 1px;
+		text-align: center;
+	}*/
+	.tab_panel.active {
+		display: block;
+	}
+
+
+</style>
+
+<script>
+	$(".tab1_label").on("click",function(){
+		var $th = $(this).index();
+		$(this).addClass("active");
+		$(".tab2_label").removeClass("active");
+		$(".tab_panel").removeClass("active");
+		$(".tab_panel").eq($th).addClass("active");
+	});
+
+	$(".tab2_label").on("click",function(){
+		var $th = $(this).index();
+		$(this).addClass("active");
+		$(".tab1_label").removeClass("active");
+		$(".tab_panel").removeClass("active");
+		$(".tab_panel").eq($th).addClass("active");
+	});
+</script>
