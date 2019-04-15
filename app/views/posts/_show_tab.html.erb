@@ -10,16 +10,14 @@
 			<% @posts.each do |post| %>
 				<% if post.report? %>
 					<% if post.images.attached? %>
-				  		<% post.images.each do |image| %>
-				    		<%= link_to post_path(post.id) do %>
-				    			<%= image_tag image.variant(resize: "200x200")%>
-				    		<% end %>
-				    	<% end %>
+			    		<%= link_to post_path(post.id) do %>
+			    			<%= image_tag post.images[0]%>
+			    		<% end %>
 					<% else %>
 						<%= link_to post_path(post.id) do %>
 							<%= image_tag("no_image.jpg", size: "200x200") %>
 						<% end %>
-					<% end %>
+					<% end %><br>
 					<%= post.title %>
 					<br><br>
 				<% end %>
@@ -31,16 +29,14 @@
 			<% @posts.each do |post| %>
 				<% if post.list? %>
 					<% if post.images.attached? %>
-			  			<% post.images.each do |image| %>
-			    			<%= link_to post_path(post.id) do %>
-			    				<%= image_tag image.variant(resize: "200x200")%>
-			    			<% end %>
-			    		<% end %>
+		    			<%= link_to post_path(post.id) do %>
+		    				<%= image_tag post.images[0] %>
+		    			<% end %>
 					<% else %>
 						<%= link_to post_path(post.id) do %>
 							<%= image_tag("no_image.jpg", size: "200x200") %>
 						<% end %>
-					<% end %>
+					<% end %><br>
 					<%= post.title %>
 					<br><br>
 				<% end %>
@@ -51,6 +47,9 @@
 </div>
 
 <style>
+	img {
+		width: 200px;
+	}
 	.tab_wrap {
 		width: 800px;
 		margin: 80px auto;
@@ -95,12 +94,11 @@
 		font-size: 14px;
 		letter-spacing: 1px;
 		text-align: center;
+		position: relative;
 	}
 	.tab_panel.active {
 		display: block;
 	}
-
-
 </style>
 
 <script>
