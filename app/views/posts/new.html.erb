@@ -4,52 +4,60 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-offset-3 col-md-6">
+        <div class="col-md-offset-3 col-md-8">
             <h1>新規投稿</h1>
             <br>
             <br>
             <div class="images-field clearfix">
                 <%= form_with model: @post, local: true  do |f| %>
-                    <div class="field">
+                    <div class="form_area">
                         <label>行ったお店</label>
                         <%= f.radio_button :status, :report %>
                         <label>行きたいお店</label>
                         <%= f.radio_button :status, :list %>
+                        <br>
+                        <label>レポート写真</label>
+                        <%= f.file_field :images, multiple: true, class: "file-input", id: :imgInp %>
+                        <output id="list"></output>
                     </div>
                     <br>
-
-                    <label>レポート写真</label>
-                    <%= f.file_field :images, multiple: true, class: "file-input", id: :imgInp %>
-                    <output id="list"></output>
-
-                    <% if @post.images.attached? %>
-                        <% @post.images.each do |image| %>
-                            <%= image_tag image.variant(resize: "200x200") %>
-                    	<% end %>
-                    <% end %>
-                    <br>
-
-                    <label>タイトル</label>
-                    <%= f.text_field :title %><br>
-                    <label>本文</label>
-                    <%= f.text_area :body %><br>
-                    <label>利用日</label>
-                    <%= f.date_field :used_at %><br>
-                    <label>店名</label>
-                    <%= f.text_field :shop_name %><br>
-                    <label>住所</label>
-                    <%= f.text_field :shop_address %><br>
-                    <label>URL</label>
-                    <%= f.text_field :url %><br>
-                    <label>価格帯</label>
-                    <%= f.collection_select :price_id, Price.all, :id, :price_range %>
-
-                    <%= f.submit "投稿" %>
+                    <div class="form_area">
+                        <label>タイトル</label>
+                        <%= f.text_field :title %><br>
+                        <label>本文</label>
+                        <%= f.text_area :body %><br>
+                        <label>利用日</label>
+                        <%= f.date_field :used_at %><br>
+                        <label>店名</label>
+                        <%= f.text_field :shop_name %><br>
+                        <label>住所</label>
+                        <%= f.text_field :shop_address %><br>
+                        <label>URL</label>
+                        <%= f.text_field :url %><br>
+                        <label>価格帯</label>
+                        <%= f.collection_select :price_id, Price.all, :id, :price_range %><br>
+                        <%= f.submit "投稿" %>
+                    </div>
                 <% end %>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .reader_file {
+        /*float: left;*/
+    }
+    .reader_image {
+        /*float: left;*/
+        width: 300px;
+        height: 300px;
+    }
+    .form_area {
+        float: left;
+        margin-right: 50px;
+    }
+</style>
 
 <script>
     document.getElementById('imgInp').onchange = function(event) {
@@ -59,6 +67,15 @@
 
         for (var i = 0, f; f = files[i]; i++) {
             var reader = new FileReader();
+            // var size = f.size;
+            // var limit = 50000;
+
+            // if ( limit < size ) {
+            //     alert('500KBを超えています。500KB以下のファイルを選択してください。');
+            //     f.value = '';
+            //     return;
+            // }
+
             reader.readAsDataURL(f);
 
             reader.onload = (function(theFile) {
@@ -66,7 +83,7 @@
                     var div = document.createElement('div');
                     div.className = 'reader_file';
                     div.innerHTML = '<div class="reader_title">' + encodeURIComponent(theFile.name) + '</div>';
-                    div.innerHTML += '<img class="reader_image" src="' + e.target.result + '" width="150px" />';
+                    div.innerHTML += '<img class="reader_image" src="' + e.target.result + '" />';
                     document.getElementById('list').insertBefore(div, null);
                 }
             })(f);

@@ -2,29 +2,42 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-offset-3 col-md-6">
-        	<% @posts.each do |post| %>
+        <div class="col-md-offset-2 col-md-8">
+        	<!-- 検索フォーム -->
+        	<%= search_form_for @search do |s| %>
+        		<div class="form-group">
+        			<%= s.search_field :title_or_body_or_shop_name_or_shop_address_cont, placeholder: "フリーワード検索", class: "form-control" %>
+			  	</div>
+			  	<div class="actions"><%= s.submit "Search", class: "btn btn-primary" %></div>
+			<% end %>
+			<br>
 
-        	<div class="post_index">
-				<% if post.images.attached? %>
-				  <% post.images.each do |image| %>
-				    <%= link_to post_path(post.id) do %>
-				    	<%= image_tag image.variant(resize: "200x200") %>
-				    <% end %>
-				  <% end %>
-				<% else %>
-					<%= link_to post_path(post.id) do %>
-						<%= image_tag("no_image.jpg", size: "200x200") %>
-					<% end %>
-				<% end %><br />
-				<%= post.title %>
-
-				<!-- お気に入り登録 -->
-				<div id="favorites_buttons_<%= post.id %>">
-					<%= render partial: 'favorites/favorite_form', locals: { post: post, favorites: @favorites} %>
+			<% @posts.each do |post| %>
+				<div class="image">
+					<% if post.images.attached? %>
+						<%= link_to post_path(post.id) do %>
+							<%= image_tag post.images[0] %>
+						<% end %>
+					<% end %><br>
+					<%= post.title %>
+					<!-- お気に入り登録 -->
+					<div id="favorites_buttons_<%= post.id %>">
+						<%= render partial: 'favorites/favorite_form', locals: { post: post, favorites: @favorites} %>
+					</div>
 				</div>
-			</div>
 			<% end %>
 		</div>
 	</div>
 </div>
+
+<style>
+	.image {
+		float: left;
+		width: 250px;
+		height: 250px;
+	}
+	img {
+		height: 200px;
+		margin: 5px;
+	}
+</style>
