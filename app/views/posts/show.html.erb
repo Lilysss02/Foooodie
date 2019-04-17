@@ -10,6 +10,12 @@
         	<% end %>
         	<br>
 
+			<% if @post.report? %>
+				<div class="status report">行ったお店</div>
+			<% else %>
+				<div class="status list">行きたいお店</div>
+			<% end %>
+
 			<% if @post.images.attached? %>
 			  <% @post.images.each do |image| %>
 			    <%= image_tag image %>
@@ -18,14 +24,7 @@
 				<%= image_tag("no_image.jpg", size: "300x300") %>
 			<% end %>
 
-
 			<div class="col-md-8">
-				<% if @post.report? %>
-					<div class="status report">行ったお店</div>
-				<% else %>
-					<div class="status list">行きたいお店</div>
-				<% end %>
-
 				<label>タイトル</label>
 				<%= @post.title %><br>
 				<label>本文</label>

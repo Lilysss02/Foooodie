@@ -15,6 +15,7 @@ class PostsController < ApplicationController
   end
 
   def create
+    binding.pry
     @post = Post.new(post_params)
     @post.user_id = current_user.id
     if @post.save
@@ -43,7 +44,7 @@ class PostsController < ApplicationController
   end
 
   def destroy
-    if post.destroy
+    if @post.destroy
       redirect_to user_path(current_user)
     end
   end
@@ -55,10 +56,7 @@ class PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:title, :body, :used_at, :shop_name, :shop_address, :price_id, :url, :status, :user_id, images: [])
+    params.require(:post).permit(:title, :body, :used_at, :shop_name, :shop_address, :shop_map, :latitude, :longitude, :price_id, :url, :status, :user_id, images: [])
   end
 
-  # def set_item
-  #   @post = post.with_attached_images.find(params[:id])
-  # end
 end
