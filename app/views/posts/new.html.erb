@@ -17,7 +17,7 @@
                         <%= f.radio_button :status, :list %>
                         <br>
                         <label>レポート写真</label>
-                        <%= f.file_field :images, multiple: true, class: "file-input", id: :imgInp %>
+                        <%= f.file_field :images, multiple: true, id: :imgInp %>
                         <output id="list"></output>
                     </div>
                     <br>
@@ -32,7 +32,12 @@
                         <%= f.text_field :shop_name, id: "shop_name" %><br>
                         <label>住所</label>
                         <%= f.text_field :shop_address, id: "shop_address" %><br>
+                        <!-- place_idの保存 -->
                         <%= f.hidden_field :shop_map, id: "shop_map" %>
+                        <!-- 緯度(latitude)の保存 -->
+                        <%= f.hidden_field :latitude, id: "latitude" %>
+                        <!-- 経度(longitude)の保存 -->
+                        <%= f.hidden_field :longitude, id: "longitude" %>
                         <label>URL</label>
                         <%= f.text_field :url, id: "shop_url" %><br>
                         <label>価格帯</label>
@@ -151,11 +156,12 @@ function initMap() {
     $('#shop_address').val(place.formatted_address.replace(/日本、/g , "" ));
     $('#shop_url').val(place.website);
     $('#shop_map').val(place.place_id);
+    $('#latitude').val(place.geometry.location.lat());
+    $('#longitude').val(place.geometry.location.lng());
     infowindow.open(map, marker);
   });
 }
 </script>
-<!-- API -->
 
 <style>
     .reader_file {
