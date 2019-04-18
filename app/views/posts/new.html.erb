@@ -37,7 +37,7 @@
                         <!-- 緯度(latitude)の保存 -->
                         <%= f.hidden_field :latitude, id: "latitude" %>
                         <!-- 経度(longitude)の保存 -->
-                        <%= f.hidden_field :longitude, id: "longitude" %>
+                        <%= f.text_field :longitude, id: "longitude" %>
                         <label>URL</label>
                         <%= f.text_field :url, id: "shop_url" %><br>
                         <label>価格帯</label>
@@ -46,7 +46,9 @@
                         <div class="pac-card" id="pac-card">
                             <input id="pac-input" type="text" placeholder="Enter a location">
                         </div>
+
                         <div id="map"></div>
+
                         <div id="infowindow-content">
                           <img src="" width="16" height="16" id="place-icon">
                           <span id="place-name"  class="title"></span><br>
@@ -61,7 +63,6 @@
         </div>
     </div>
 </div>
-
 <script>
     document.getElementById('imgInp').onchange = function(event) {
         initializeFiles();
@@ -100,7 +101,7 @@
 
 /////////////////////// Google Map ///////////////////////
 
-function initMap() {
+function init() {
   var map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 35.658191, lng: 139.701677},
     zoom: 13
@@ -159,8 +160,11 @@ function initMap() {
     $('#latitude').val(place.geometry.location.lat());
     $('#longitude').val(place.geometry.location.lng());
     infowindow.open(map, marker);
+
   });
 }
+$(document).on('turbolinks:load');
+init();
 </script>
 
 <style>

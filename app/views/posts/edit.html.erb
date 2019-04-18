@@ -1,4 +1,4 @@
-<div class="container">
+  <div class="container">
     <div class="row">
         <div class="col-md-offset-3 col-md-6">
             <h2>投稿編集ページ</h2>
@@ -40,12 +40,14 @@
                         <div class="pac-card" id="pac-card">
                             <input id="pac-input" type="text" placeholder="Enter a location">
                         </div>
+
                         <div id="map"></div>
                         <div id="infowindow-content">
                           <img src="" width="16" height="16" id="place-icon">
                           <span id="place-name"  class="title"></span><br>
                           <span id="place-address"></span>
                         </div>
+
                         <%= f.submit "更新", class: "btn btn-primary btn-sm" %>
                 <% end %>
                 <%= link_to "Back", post_path(@post) %>
@@ -92,14 +94,22 @@
 
 
 /////////////////////// Google Map ///////////////////////
+var map;
 
-function initMap() {
-  var map = new google.maps.Map(document.getElementById('map'), {
-    // center: {lat: 35.658191, lng: 139.701677},
-    center: {lat: $('#latitude'), lng: $('#longitude')},
-    zoom: 13
-  });
-  console.log($('#latitude'));
+function init() {
+  // Google Mapで利用する初期設定用の変数
+  var latitude = document.getElementById('latitude').value;
+  var longitude = document.getElementById('longitude').value;
+  var latlng = new google.maps.LatLng(latitude, longitude);
+  var opts = {
+    zoom: 13,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    center: latlng
+  };
+
+  // getElementById("map")の"map"は、body内の<div id="map">より
+  map = new google.maps.Map(document.getElementById("map"), opts);
+
   var card = document.getElementById('pac-card');
   var input = document.getElementById('pac-input');
 
@@ -114,6 +124,30 @@ function initMap() {
 
   autocomplete.setFields(
       ['formatted_address', 'place_id', 'geometry', 'icon', 'name', 'website']);
+
+
+  // Markerの初期設定
+  var markerOpts = {
+    position: new google.maps.LatLng(latitude, longitude),
+    map: map,
+    title: "marker"
+  };
+  // 直前で作成したMarkerOptionsを利用してMarkerを作成
+  var marker = new google.maps.Marker(markerOpts);
+
+  // 情報ウィンドウ
+  var infowindow = new google.maps.InfoWindow();
+  var infowindowContent = document.getElementById('infowindow-content');
+  // var placeIcon = document.getElementById('place-icon');
+  var placeName = document.getElementById('shop_name').value;
+  var placeAddress = document.getElementById('shop_address').value;
+  // 情報ウィンドウの内容をセットする
+  infowindow.setContent(infowindowContent);
+  infowindowContent.children['place-name'].textContent = placeName;
+  infowindowContent.children['place-address'].innerHTML = placeAddress;
+  infowindow.open(map, marker);
+
+
 
   // 情報ウィンドウ
   var infowindow = new google.maps.InfoWindow();
@@ -147,6 +181,7 @@ function initMap() {
     infowindowContent.children['place-icon'].src = place.icon;
     infowindowContent.children['place-name'].textContent = place.name;
     infowindowContent.children['place-address'].textContent = place.formatted_address.replace(/日本、/g , "" );
+
     $('#shop_name').val(place.name);
     $('#shop_address').val(place.formatted_address.replace(/日本、/g , "" ));
     $('#shop_url').val(place.website);
@@ -156,6 +191,8 @@ function initMap() {
     infowindow.open(map, marker);
   });
 }
+$(document).on('turbolinks:load');
+init();
 </script>
 
 <style>
