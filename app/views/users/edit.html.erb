@@ -26,24 +26,24 @@
 </div>
 
 <script>
-document.getElementById('imgInp').onchange = function(event) {
-    initializeFiles();
+	document.getElementById('imgInp').onchange = function(event) {
+	    initializeFiles();
 
-    var file = event.target.files[0],
-    	reader = new FileReader();
-        reader.readAsDataURL(file);
+	    var file = event.target.files[0],
+	    	reader = new FileReader();
+	        reader.readAsDataURL(file);
 
-        reader.onload = (function(file) {
-            return function(e) {
-                var div = document.createElement('div');
-                div.className = 'reader_file';
-                div.innerHTML += '<img class="reader_image" src="' + e.target.result + '" width="150px" />';
-                document.getElementById('list').insertBefore(div, null);
-            };
-        })(file);
-    };
+	        reader.onload = (function(file) {
+	            return function(e) {
+	                var div = document.createElement('div');
+	                div.className = 'reader_file';
+	                div.innerHTML += '<img class="reader_image" src="' + e.target.result + '" width="150px" />';
+	                document.getElementById('list').insertBefore(div, null);
+	            };
+	        })(file);
+	    };
 
-function initializeFiles() {
-    document.getElementById('list').innerHTML = '';
-};
+	function initializeFiles() {
+	    document.getElementById('list').innerHTML = '';
+	};
 </script>

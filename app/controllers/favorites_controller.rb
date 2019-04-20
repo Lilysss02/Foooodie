@@ -12,6 +12,15 @@ class FavoritesController < ApplicationController
 	def destroy
 		@post = Post.find(params[:post_id])
         @favorite = current_user.favorites.find_by(post_id: params[:post_id]).destroy
+        # redirect_to favorites_index_path
         @favorites = Favorite.where(post_id: params[:post_id])
+	end
+
+	def delete
+		@favorite = current_user.favorites.find_by(post_id: params[:post_id])
+		if @favorite.destroy
+			redirect_to favorites_index_path
+		else
+		end
 	end
 end

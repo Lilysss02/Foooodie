@@ -1,6 +1,9 @@
 <h1>お気に入り</h1>
 <div class="container">
 	<div class="row">
+		<% if @favorites.length == 0 %>
+			<h4>お気に入りはありません</h4>
+		<% end %>
 		<% @favorites.each do |favorite| %>
 			<div class="image">
 				<% if favorite.post.images.attached? %>
@@ -8,14 +11,14 @@
 						<%= image_tag favorite.post.images[0] %> <br>
 					<% end %>
 				<% else %>
-					<%= link_to post_path(post.id) do %>
+					<%= link_to post_path(favorite.post.id) do %>
 						<%= image_tag("no_image.jpg", size: "200x200") %>
 					<% end %>
-				<% end %><br>
-				<%= favorite.post.title %>
-				<%= link_to post_favorites_path(post_id: favorite.post.id), method: :delete, data: { confirm: '削除しますか？' } , class: "btn btn-default btn-xs" do %>
+				<% end %>
+				<%= link_to favorites_delete_path(favorite.post.id), method: :delete, data: { confirm: '削除しますか？' } , class: "btn btn-default btn-xs" do %>
 					<i class="delete-icon glyphicon glyphicon-trash" aria-hidden="true"></i>
 				<% end %>
+				<br>
 			</div>
 		<% end %>
 	</div>
@@ -24,11 +27,28 @@
 <style>
 	.image {
 		float: left;
-		width: 250px;
-		height: 250px;
+/*		width: 300px;
+		height: 250px;*/
+	    margin: 5px;
+	    border: 10px solid #fff;
+		background-color: #fff;
+	    overflow: hidden;
+	    text-align: center;
+	    box-shadow: 3px 3px 6px #e6e6e6;
+	    cursor: default;
+		transform : translate(0, 50px);
+		transition:all 0.5s;
+		border-radius: 10px;
+		width: 40vmin;
+		height: 40vmin;
+		}
+	.image.scrollin {
+		opacity : 1;
+		transform : translate(0, 0);
 	}
 	img {
 		height: 200px;
 		margin: 5px;
+		position: relative;
 	}
 </style>

@@ -7,7 +7,7 @@
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
 
-    <script ></script>
+    <script></script>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
@@ -15,15 +15,23 @@
     <nav class="navbar navbar-inverse">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">Portfolio</a>
+          <div class="navbar-brand">Portfolio</div>
         </div>
         <ul class="nav navbar-nav">
           <li><%= link_to "Home", root_path %></li>
+
           <% if user_signed_in? %>
             <li><%= link_to "MyPage", user_path(current_user) %></li>
             <li><%= link_to "Favorites", favorites_index_path %></li>
             <li><%= link_to "LogOut", destroy_user_session_path, method: :delete %></li>
+            <li id="user_name">
+              <%= current_user.user_name %>
+              <span> 様   </span>
+              <span>ログイン中</span>
+            </li>
+
           <% else %>
+
             <li><%= link_to "LogIn", new_user_session_path %></li>
             <li><%= link_to "SignUp", new_user_registration_path %></li>
           <% end %>

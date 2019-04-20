@@ -1,8 +1,10 @@
-<h1>TOPページ</h1>
+<div class="main">
+	<div class="main-visual"></div>
+</div>
 
 <div class="container">
     <div class="row">
-        <div class="col-md-offset-2 col-md-8">
+        <div class="col-md-offset-1 col-md-11">
         	<!-- 検索フォーム -->
         	<%= search_form_for @search do |s| %>
         		<div class="form-group">
@@ -11,15 +13,18 @@
 			  	<div class="actions"><%= s.submit "Search", class: "btn btn-primary" %></div>
 			<% end %>
 			<br>
-
 			<% @posts.each do |post| %>
-				<div class="image">
+				<div class="image squareBox">
 					<% if post.images.attached? %>
 						<%= link_to post_path(post.id) do %>
 							<%= image_tag post.images[0] %>
 						<% end %>
-					<% end %><br>
-					<%= post.title %>
+					<% end %>
+					<div class="mask">
+						<%= link_to post_path(post.id), class: "title" do %>
+						<div class="caption"><%= post.title %></div>
+						<% end %>
+					</div><br>
 					<!-- お気に入り登録 -->
 					<div id="favorites_buttons_<%= post.id %>">
 						<%= render partial: 'favorites/favorite_form', locals: { post: post, favorites: @favorites} %>
@@ -29,15 +34,104 @@
 		</div>
 	</div>
 </div>
+<section id="deleteArea" class="modalArea">
+	<div id="deleteBg" class="modalBg"></div>
+	<div class="modalWrapper">
+		<div class="modalContents">
+			<h3>お気に入りから削除しました！</h3>
+		</div>
+		<div id="delcloseModal" class="closeModal"> × </div>
+	</div>
+</section>
+<section id="favoriteArea" class="modalArea">
+	<div id="favoriteBg" class="modalBg"></div>
+		<div class="modalWrapper">
+			<div class="modalContents">
+				<h3>お気に入りに登録しました！</h3>
+			</div>
+		<div id="favcloseModal" class="closeModal"> × </div>
+	</div>
+</section>
 
 <style>
+	.actions {
+		text-align: center;
+	}
 	.image {
 		float: left;
-		width: 250px;
-		height: 250px;
+/*		width: 300px;
+		height: 250px;*/
+	    margin: 5px;
+	    border: 10px solid #fff;
+		background-color: #fff;
+	    overflow: hidden;
+	    text-align: center;
+	    box-shadow: 3px 3px 6px #e6e6e6;
+	    cursor: default;
+		transform : translate(0, 50px);
+		transition:all 0.5s;
+		border-radius: 10px;
+		width: 40vmin;
+		height: 40vmin;
+		}
+	.image.scrollin {
+		opacity : 1;
+		transform : translate(0, 0);
 	}
 	img {
 		height: 200px;
 		margin: 5px;
+		/*position: relative;*/
+	}
+	.mask {
+		width: 268px;
+		height: 200px;
+		position: absolute;
+		top: 5px;
+		left: 5px;
+		opacity:		0;
+		overflow: hidden;
+		background-color:	rgba(0,0,0,0.3);
+		transition:all 0.7s ease;
+	}
+	.mask:hover {
+		opacity: 1;
+	}
+	.caption {
+		font-family: Georgia, serif;
+		font-style: italic;
+		font-size: 15px;
+		padding-top: 90px;
+		padding-bottom: 90px;
+		color: #fff;
 	}
 </style>
+
+<script>
+  jQuery(function(){
+    jQuery(window).scroll(function (){
+        jQuery('.fadein').each(function(){
+            var elemPos = jQuery(this).offset().top;
+            var scroll = jQuery(window).scrollTop();
+            var windowHeight = jQuery(window).height();
+            if (scroll > elemPos - windowHeight + 0){
+                jQuery(this).addClass('scrollin');
+            }
+        });
+    });
+    jQuery(window).scroll();
+  });
+	// $(function(){
+	// 	$('.animation').css('visibility','hidden');
+	// 	$(window).scroll(function(){
+	// 		var windowHeight = jQuery(window).height(),
+	// 		topWindow = jQuery(window).scrollTop();
+	// 		$('.animation').each(function(){
+	// 			var targetPosition = jQuery(this).offset().top;
+	// 			if(topWindow > targetPosition - windowHeight + 100){
+	// 				jQuery(this).addClass("fadeInDown");
+	// 			}
+	// 		});
+	// 	});
+	// });
+</script>

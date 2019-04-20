@@ -5,6 +5,9 @@ class Post < ApplicationRecord
   enum status: { report: 0, list: 1 }
   has_many_attached :images
 
+  validates :title, presence: :true, length: { maximum: 50 }
+  validates :hashname, presence: true, length: { maximum: 99 }
+
   def favorited_by?(user)
     favorites.where(user_id: user.id).exists?
   end

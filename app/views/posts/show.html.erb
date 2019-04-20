@@ -21,7 +21,7 @@
 			    <%= image_tag image %>
 			  <% end %>
 			<% else %>
-				<%= image_tag("no_image.jpg", size: "300x300") %>
+				<%= image_tag("no_image.jpg") %>
 			<% end %>
 
 			<div class="col-md-8">
@@ -30,14 +30,16 @@
 				<label>本文</label>
 				<!-- posts_helperに記載 -->
 				<%= render_with_hashtags(@post.body) %><br>
-                <label>利用日</label>
-                <%= @post.used_at %><br>
+				<% if @post.report? %>
+	                <label>利用日</label>
+	                <%= @post.used_at %><br>
+                <% end %>
                 <label>店名</label>
                 <%= @post.shop_name %><br>
                 <label>住所</label>
                 <%= @post.shop_address %><br>
                 <label>URL</label>
-                <%= @post.url %><br>
+                <%= link_to "#{@post.url}", @post.url %><br>
                 <label>価格帯</label>
                 <%= @post.price.price_range %>
 			</div>

@@ -4,11 +4,12 @@
 		<label class="tab2_label" for="tab2">行きたいお店</label>
 	</div>
 
-	<div class="panel_area">
-		<div id="panel1" class="tab_panel active">
+	<div class="panel_area clearfix">
+		<div id="panel1" class="tab_panel active clearfix">
 			<!-- 行ったお店 -->
 			<% @posts.each do |post| %>
 				<% if post.report? %>
+				<div class="image">
 					<% if post.images.attached? %>
 			    		<%= link_to post_path(post.id) do %>
 			    			<%= image_tag post.images[0]%>
@@ -17,17 +18,17 @@
 						<%= link_to post_path(post.id) do %>
 							<%= image_tag("no_image.jpg", size: "200x200") %>
 						<% end %>
-					<% end %><br>
-					<%= post.title %>
-					<br><br>
+					<% end %>
+				</div>
 				<% end %>
 			<% end %>
 		</div>
 
-		<div id="panel2" class="tab_panel">
+		<div id="panel2" class="tab_panel clearfix">
 			<!-- 行きたいお店 -->
 			<% @posts.each do |post| %>
 				<% if post.list? %>
+				<div class="image">
 					<% if post.images.attached? %>
 		    			<%= link_to post_path(post.id) do %>
 		    				<%= image_tag post.images[0] %>
@@ -36,9 +37,8 @@
 						<%= link_to post_path(post.id) do %>
 							<%= image_tag("no_image.jpg", size: "200x200") %>
 						<% end %>
-					<% end %><br>
-					<%= post.title %>
-					<br><br>
+					<% end %>
+				</div>
 				<% end %>
 			<% end %>
 		</div>
@@ -47,12 +47,30 @@
 </div>
 
 <style>
+	.image {
+		float: left;
+/*		width: 300px;
+		height: 250px;*/
+	    margin: 5px;
+	    border: 10px solid #fff;
+		background-color: #fff;
+	    overflow: hidden;
+	    text-align: center;
+	    box-shadow: 3px 3px 6px #e6e6e6;
+	    cursor: default;
+		transform : translate(0, 50px);
+		transition:all 0.5s;
+		border-radius: 10px;
+		width: 40vmin;
+		height: 40vmin;
+	}
 	img {
-		width: 200px;
+		height: 200px;
+		margin: 5px;
 	}
 	.tab_wrap {
 		width: 800px;
-		margin: 80px auto;
+		margin: 20px auto;
 	}
 	.tab_area {
 		font-size: 0;
@@ -63,7 +81,7 @@
 		display: inline-block;
 		padding: 14px 0 12px;
 		color: #fff;
-		background: #90c9cc;
+/*		background: #90c9cc;*/
 		text-align: center;
 		font-size: 13px;
 		cursor: pointer;
@@ -73,6 +91,12 @@
 		vertical-align: bottom;
 		transition: ease 0.2s;
 		margin:10px 5px 0;
+	}
+	.tab1_label {
+		background: #c090cc;
+	}
+	.tab2_label {
+		background: #90c9cc;
 	}
 	.tab_area label:hover {
 		opacity: 0.5;
@@ -86,15 +110,15 @@
 		border-bottom-right-radius: 10px;
 		border-bottom-left-radius: 10px;
 		border-top: 8px solid #d7e9ea;
+		padding-bottom: 100px;
 	}
 	.tab_panel{
 		width: 100%;
-		padding: 80px 0;
 		display: none;
 		font-size: 14px;
 		letter-spacing: 1px;
 		text-align: center;
-		position: relative;
+		/*position: relative;*/
 	}
 	.tab_panel.active {
 		display: block;
