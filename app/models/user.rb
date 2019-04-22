@@ -6,6 +6,7 @@ class User < ApplicationRecord
   has_one_attached :image
   has_many :posts
   has_many :favorites, dependent: :destroy
+  validates :user_name, presence: :true
 
   # フォローできるユーザを取り出す記述（user.following_relationships.followingsできるように）
   has_many :following_relationships, foreign_key: "follower_id", class_name: "Relationship", dependent: :destroy

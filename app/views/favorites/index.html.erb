@@ -4,33 +4,26 @@
 		<% if @favorites.length == 0 %>
 			<h4>お気に入りはありません</h4>
 		<% end %>
+		<div class="layout">
 		<% @favorites.each do |favorite| %>
 			<div class="image">
 				<% if favorite.post.images.attached? %>
 					<%= link_to post_path(favorite.post.id) do %>
 						<%= image_tag favorite.post.images[0] %> <br>
 					<% end %>
-				<% else %>
-					<%= link_to post_path(favorite.post.id) do %>
-						<%= image_tag("no_image.jpg", size: "200x200") %>
-					<% end %>
 				<% end %>
 				<%= link_to favorites_delete_path(favorite.post.id), method: :delete, data: { confirm: '削除しますか？' } , class: "btn btn-default btn-xs" do %>
-					<i class="delete-icon glyphicon glyphicon-trash" aria-hidden="true"></i>
+					<i class="glyphicon glyphicon-trash" aria-hidden="true"></i>
 				<% end %>
 				<br>
 			</div>
 		<% end %>
+		</div>
 	</div>
 </div>
 
 <style>
 	.image {
-		float: left;
-/*		width: 300px;
-		height: 250px;*/
-	    margin: 5px;
-	    border: 10px solid #fff;
 		background-color: #fff;
 	    overflow: hidden;
 	    text-align: center;
@@ -38,17 +31,30 @@
 	    cursor: default;
 		transform : translate(0, 50px);
 		transition:all 0.5s;
-		border-radius: 10px;
-		width: 40vmin;
-		height: 40vmin;
-		}
+		border-radius: 5px;
+		position: relative;
+	}
+	.layout {
+		display: grid;
+		gap: 5px;
+  		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  		grid-template-rows: 200px 200px 200px 200px 200px auto;
+	}
+
 	.image.scrollin {
 		opacity : 1;
 		transform : translate(0, 0);
 	}
-	img {
+	.image img {
 		height: 200px;
-		margin: 5px;
-		position: relative;
+		width: 200px;
+		object-fit: contain;
+		/*position: relative;*/
+	}
+	.btn {
+		font-size: 10px;
+		position: absolute;
+		top: 177px;
+		right: 10px;
 	}
 </style>

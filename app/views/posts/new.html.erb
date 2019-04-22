@@ -10,17 +10,26 @@
       <br>
       <div class="images-field clearfix">
         <%= form_with model: @post, local: true  do |f| %>
-          <div class="form_area">
-            <label>行ったお店</label>
-            <%= f.radio_button :status, :report, id: "reportRadioButton" %>
-            <label>行きたいお店</label>
-            <%= f.radio_button :status, :list, id: "listRadioButton" %>
-            <br>
-            <label>レポート写真</label>
-            <%= f.file_field :images, multiple: true, id: :imgInp %>
-            <output id="list"></output>
-            <br>
+          <% if @post.errors.any? %>
+            <h2><%= pluralize(@post.errors.count, "error") %> prohibited this post from being saved:</h2>
+            <ul>
+              <% @post.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          <% end %>
 
+          <label>行ったお店</label>
+          <%= f.radio_button :status, :report, id: "reportRadioButton" %>
+          <label>行きたいお店</label>
+          <%= f.radio_button :status, :list, id: "listRadioButton" %>
+          <br>
+          <label>レポート写真</label>
+          <%= f.file_field :images, multiple: true, id: :imgInp %>
+          <output id="list"></output>
+          <br>
+
+          <div class="form_area">
             <label>タイトル</label>
             <%= f.text_field :title %><br>
             <label>本文</label>
@@ -42,6 +51,7 @@
             <%= f.hidden_field :latitude, id: "latitude" %>
             <!-- 経度(longitude)の保存 -->
             <%= f.hidden_field :longitude, id: "longitude" %>
+          </div>
 
             <div class="pac-card" id="pac-card">
                 <input id="pac-input" type="text" placeholder="Enter a location">
@@ -109,27 +119,6 @@
 
   function initializeFiles() {
     document.getElementById('list').innerHTML = '';
-  }
-
-  document.getElementById('imgInp').onchange = function(event) {
-      initializeFiles();
-
-      var file = event.target.files[0],
-        reader = new FileReader();
-          reader.readAsDataURL(file);
-
-          reader.onload = (function(file) {
-              return function(e) {
-                  var div = document.createElement('div');
-                  div.className = 'reader_file';
-                  div.innerHTML += '<img class="reader_image" src="' + e.target.result + '" width="150px" />';
-                  document.getElementById('list').insertBefore(div, null);
-              };
-          })(file);
-      };
-
-  function initializeFiles() {
-      document.getElementById('list').innerHTML = '';
   };
 
 /////////////////////////// Google Map ///////////////////////////
@@ -200,14 +189,12 @@
 </script>
 
 <style>
-  .reader_image {
-      width: 300px;
-      height: 300px;
+  .reader_file {
+    /*float: left;*/
   }
-
-  .form_area {
-      float: left;
-      margin-right: 50px;
+  .reader_image {
+      width: 150px;
+      height: 150px;
   }
 
   #map {

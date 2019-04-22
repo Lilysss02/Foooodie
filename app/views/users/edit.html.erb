@@ -10,17 +10,24 @@
 			<br>
 			<%= form_with model: @user, local: true  do |f| %>
 
-			  <label>プロフィール画像</label>
-			  <%= f.file_field :image, class: "", id: :imgInp %>
-			  <output id="list"></output>
-			  <br>
-
-
-			  <label>ユーザ名</label>
-			  <%= f.text_field :user_name %><br>
-			  <%= f.submit "更新" %>
+			<label>現在のプロフィール画像</label>
+			<% if @user.image.attached? %>
+			    <%= image_tag @user.image.variant(resize: "200x200") %>
+			<% else %>
+				<%= image_tag("no_image.jpg", size: "200x200") %>
 			<% end %>
-			<div class="preview" /></div>
+
+			<br><br><br>
+			<%= f.file_field :image, class: "", id: :imgInp %>
+			<output id="list"></output>
+			<br>
+
+			<label>ユーザ名</label>
+			<%= f.text_field :user_name %><br><br>
+			<%= f.submit "更新", class: "btn btn-primary btn-sm" %>
+            <br>
+            <%= link_to "Back", user_path(current_user) %>
+			<% end %>
 		</div>
 	</div>
 </div>

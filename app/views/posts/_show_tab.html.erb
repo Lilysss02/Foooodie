@@ -7,52 +7,57 @@
 	<div class="panel_area clearfix">
 		<div id="panel1" class="tab_panel active clearfix">
 			<!-- 行ったお店 -->
-			<% @posts.each do |post| %>
-				<% if post.report? %>
-				<div class="image">
-					<% if post.images.attached? %>
-			    		<%= link_to post_path(post.id) do %>
-			    			<%= image_tag post.images[0]%>
-			    		<% end %>
-					<% else %>
-						<%= link_to post_path(post.id) do %>
-							<%= image_tag("no_image.jpg", size: "200x200") %>
-						<% end %>
-					<% end %>
+			<% if @posts.length == 0 %>
+				<div class="posts_length">
+					<h4>投稿がありません</h4>
 				</div>
-				<% end %>
 			<% end %>
+			<div class="layout">
+				<% @posts.each do |post| %>
+					<% if post.report? %>
+					<div class="image">
+						<% if post.images.attached? %>
+				    		<%= link_to post_path(post.id) do %>
+				    			<%= image_tag post.images[0]%>
+				    		<% end %>
+						<% end %>
+					</div>
+					<% end %>
+				<% end %>
+			</div>
 		</div>
 
 		<div id="panel2" class="tab_panel clearfix">
 			<!-- 行きたいお店 -->
-			<% @posts.each do |post| %>
-				<% if post.list? %>
-				<div class="image">
-					<% if post.images.attached? %>
-		    			<%= link_to post_path(post.id) do %>
-		    				<%= image_tag post.images[0] %>
-		    			<% end %>
-					<% else %>
-						<%= link_to post_path(post.id) do %>
-							<%= image_tag("no_image.jpg", size: "200x200") %>
-						<% end %>
-					<% end %>
+			<% if @posts.length == 0 %>
+				<div class="posts_length">
+					<h4>投稿がありません</h4>
 				</div>
-				<% end %>
 			<% end %>
+			<div class="layout">
+				<% @posts.each do |post| %>
+					<% if post.list? %>
+					<div class="image">
+						<% if post.images.attached? %>
+			    			<%= link_to post_path(post.id) do %>
+			    				<%= image_tag post.images[0] %>
+			    			<% end %>
+						<% end %>
+					</div>
+					<% end %>
+				<% end %>
+			</div>
 		</div>
 
 	</div>
 </div>
 
 <style>
+	.posts_length {
+		padding-top: 100px;
+		text-align: center;
+	}
 	.image {
-		float: left;
-/*		width: 300px;
-		height: 250px;*/
-	    margin: 5px;
-	    border: 10px solid #fff;
 		background-color: #fff;
 	    overflow: hidden;
 	    text-align: center;
@@ -60,14 +65,26 @@
 	    cursor: default;
 		transform : translate(0, 50px);
 		transition:all 0.5s;
-		border-radius: 10px;
-		width: 40vmin;
-		height: 40vmin;
+		border-radius: 5px;
+		position: relative;
 	}
-	img {
+	.layout {
+		display: grid;
+		gap: 5px;
+  		grid-template-columns: 1fr 1fr 1fr;
+  		grid-template-rows: 200px 200px 200px auto;
+	}
+
+	.image.scrollin {
+		opacity : 1;
+		transform : translate(0, 0);
+	}
+	.image img {
 		height: 200px;
-		margin: 5px;
+		width: 200px;
+		object-fit: contain;
 	}
+
 	.tab_wrap {
 		width: 800px;
 		margin: 20px auto;
@@ -81,7 +98,6 @@
 		display: inline-block;
 		padding: 14px 0 12px;
 		color: #fff;
-/*		background: #90c9cc;*/
 		text-align: center;
 		font-size: 13px;
 		cursor: pointer;
@@ -101,24 +117,30 @@
 	.tab_area label:hover {
 		opacity: 0.5;
 	}
-	.tab_area label.active {
-		color: #000;
+/*	.tab_area label.active {
+		color: #fff;
 		opacity: 0.5;
-	}
+	}*/
 	.panel_area {
 		background: #ddd;
 		border-bottom-right-radius: 10px;
 		border-bottom-left-radius: 10px;
-		border-top: 8px solid #d7e9ea;
+/*		border-top: 8px solid #d7e9ea;*/
 		padding-bottom: 100px;
+	}
+	#panel1 {
+		border-top: 8px solid #c090cc;
+	}
+	#panel2 {
+		border-top: 8px solid #90c9cc;
 	}
 	.tab_panel{
 		width: 100%;
+		padding: 0 100px;
 		display: none;
 		font-size: 14px;
 		letter-spacing: 1px;
-		text-align: center;
-		/*position: relative;*/
+		/*text-align: center;*/
 	}
 	.tab_panel.active {
 		display: block;

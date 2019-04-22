@@ -1,10 +1,11 @@
-<div class="main">
-	<div class="main-visual"></div>
+<div class="slider">
+	<div class=""><%= image_tag 'sweets.jpg' %></div>
+	<div class=""><%= image_tag 'amechan.jpg' %></div>
 </div>
 
 <div class="container">
     <div class="row">
-        <div class="col-md-offset-1 col-md-11">
+
         	<!-- 検索フォーム -->
         	<%= search_form_for @search do |s| %>
         		<div class="form-group">
@@ -13,8 +14,11 @@
 			  	<div class="actions"><%= s.submit "Search", class: "btn btn-primary" %></div>
 			<% end %>
 			<br>
+
+			<div class="layout">
 			<% @posts.each do |post| %>
-				<div class="image squareBox">
+				<% if post.report? %>
+				<div class="image">
 					<% if post.images.attached? %>
 						<%= link_to post_path(post.id) do %>
 							<%= image_tag post.images[0] %>
@@ -31,7 +35,9 @@
 					</div>
 				</div>
 			<% end %>
-		</div>
+			<% end %>
+			</div>
+
 	</div>
 </div>
 <section id="deleteArea" class="modalArea">
@@ -54,15 +60,19 @@
 </section>
 
 <style>
+	.slider {
+		width: 100%;
+	}
+	.slider img {
+		width: 100%;
+		height: 500px;
+		object-fit: cover;
+		margin: 0;
+	}
 	.actions {
 		text-align: center;
 	}
 	.image {
-		float: left;
-/*		width: 300px;
-		height: 250px;*/
-	    margin: 5px;
-	    border: 10px solid #fff;
 		background-color: #fff;
 	    overflow: hidden;
 	    text-align: center;
@@ -70,25 +80,33 @@
 	    cursor: default;
 		transform : translate(0, 50px);
 		transition:all 0.5s;
-		border-radius: 10px;
-		width: 40vmin;
-		height: 40vmin;
-		}
+		border-radius: 5px;
+		position: relative;
+	}
+	.layout {
+		display: grid;
+		gap: 5px;
+  		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  		grid-template-rows: 200px 200px 200px 200px 200px auto;
+	}
+
 	.image.scrollin {
 		opacity : 1;
 		transform : translate(0, 0);
 	}
-	img {
+	.image img {
 		height: 200px;
-		margin: 5px;
+		width: 200px;
+		object-fit: contain;
 		/*position: relative;*/
 	}
-	.mask {
+
+/*	.mask {
 		width: 268px;
 		height: 200px;
 		position: absolute;
-		top: 5px;
-		left: 5px;
+		top: 0px;
+		left: 0px;
 		opacity:		0;
 		overflow: hidden;
 		background-color:	rgba(0,0,0,0.3);
@@ -96,7 +114,7 @@
 	}
 	.mask:hover {
 		opacity: 1;
-	}
+	}*/
 	.caption {
 		font-family: Georgia, serif;
 		font-style: italic;
@@ -105,22 +123,71 @@
 		padding-bottom: 90px;
 		color: #fff;
 	}
+	h3 {
+		text-align: center;
+	}
+
+	/* モーダルCSS */
+	.modalArea {
+	  display: none;
+	  position: fixed;
+	  z-index: 10; /*ここの数値は調整 */
+	  top: 0;
+	  left: 0;
+	  width: 100%;
+	  height: 100%;
+	}
+
+	.modalBg {
+	  width: 100%;
+	  height: 100%;
+	  background-color: rgba(30,30,30,0.9);
+	}
+
+	.modalWrapper {
+	  position: absolute;
+	  top: 50%;
+	  left: 50%;
+	  transform:translate(-50%,-50%);
+	  width: 70%;
+	  max-width: 500px;
+	  padding: 10px 30px;
+	  background-color: #fff;
+	}
+
+	.closeModal {
+	  position: absolute;
+	  top: 0.5rem;
+	  right: 1rem;
+	  cursor: pointer;
+	}
 </style>
 
 <script>
-  jQuery(function(){
-    jQuery(window).scroll(function (){
-        jQuery('.fadein').each(function(){
-            var elemPos = jQuery(this).offset().top;
-            var scroll = jQuery(window).scrollTop();
-            var windowHeight = jQuery(window).height();
-            if (scroll > elemPos - windowHeight + 0){
-                jQuery(this).addClass('scrollin');
-            }
-        });
-    });
-    jQuery(window).scroll();
-  });
+	$(document).ready(function(){
+		$('.slider').slick({
+			autoplay: true,
+			autoplaySpeed: 3000,
+			arrows: false,
+			dots: false,
+			fade: true,
+			speed: 300
+		});
+	});
+
+	jQuery(function(){
+		jQuery(window).scroll(function (){
+			jQuery('.fadein').each(function(){
+				var elemPos = jQuery(this).offset().top;
+            	var scroll = jQuery(window).scrollTop();
+            	var windowHeight = jQuery(window).height();
+            	if (scroll > elemPos - windowHeight + 0){
+            		jQuery(this).addClass('scrollin');
+            	}
+            });
+		});
+		jQuery(window).scroll();
+	});
 	// $(function(){
 	// 	$('.animation').css('visibility','hidden');
 	// 	$(window).scroll(function(){

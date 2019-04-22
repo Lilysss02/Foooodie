@@ -12,7 +12,14 @@
             <label>行きたいお店</label>
             <%= f.radio_button :status, :list, id: "listRadioButton", onchange: "onRadioButtonChange();" %>
             <br>
-            <label>レポート写真</label>
+
+            <label>現在の投稿画像</label>
+            <% if @post.images.attached? %>
+              <% @post.images.each do |image| %>
+                <%= image_tag image %>
+              <% end %>
+            <% end %>
+            <br><br>
             <%= f.file_field :images, multiple: true, id: :imgInp %>
             <output id="list"></output>
             <br>
@@ -220,9 +227,12 @@ init();
 </script>
 
 <style>
+  img {
+    height: 200px;
+  }
   .reader_image {
     width: 300px;
-  height: 300px;
+    height: 300px;
   }
 
   .form_area {
