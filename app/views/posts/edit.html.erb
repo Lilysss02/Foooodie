@@ -7,15 +7,11 @@
       <div class="images-field clearfix">
         <%= form_with model: @post, local: true  do |f| %>
           <div class="form_area">
-            <label>行ったお店</label>
-            <%= f.radio_button :status, :report, id: "reportRadioButton", onchange: "onRadioButtonChange();" %>
-            <label>行きたいお店</label>
-            <%= f.radio_button :status, :list, id: "listRadioButton", onchange: "onRadioButtonChange();" %>
-            <br>
 
-            <label>現在の投稿画像</label>
+            <label>現在登録されている画像（削除するものはチェックしてください）</label>
             <% if @post.images.attached? %>
               <% @post.images.each do |image| %>
+                <%= f.check_box :images, {:multiple => true}, image.id, false %>
                 <%= image_tag image %>
               <% end %>
             <% end %>
@@ -23,6 +19,7 @@
             <%= f.file_field :images, multiple: true, id: :imgInp %>
             <output id="list"></output>
             <br>
+
             <label>タイトル</label>
             <%= f.text_field :title %><br>
             <label>本文</label>
@@ -37,6 +34,9 @@
             <%= f.text_field :url, id: "shop_url" %><br>
             <label>価格帯</label>
             <%= f.collection_select :price_id, Price.all, :id, :price_range %><br>
+
+            <%= f.check_box :status, {}, :draft, :published %>
+            <label>下書きに保存</label>
 
             <!-- place_idの保存 -->
             <%= f.hidden_field :shop_map, id: "shop_map" %>
@@ -69,26 +69,6 @@
 </div>
 
 <script>
-////////////////////////// ラジオボタンの操作 //////////////////////////
-function onRadioButtonChange() {
-      check1 = document.getElementById("reportRadioButton").checked;
-      check2 = document.getElementById("listRadioButton").checked;
-
-      if (check1 == true) {
-        $('#used_at').prop("disabled", false).css('background', '');
-      }
-      else if (check2 == true) {
-        $("#used_at").prop("disabled",true).css('background', '#ddd');
-      }
-    }
-
-  // $("#list").on("click", function() {
-  //   $("#used_at").prop("disabled",true).css('background', '#ddd');
-  // });
-  // $("#report").on("click", function() {
-  //   $('#used_at').prop("disabled", false).css('background', '');
-  // });
-
 /////////////////////////// 画像プレビュー ///////////////////////////
   document.getElementById('imgInp').onchange = function(event) {
     initializeFiles();

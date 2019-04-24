@@ -16,8 +16,7 @@
 			<br>
 
 			<div class="layout">
-			<% @posts.each do |post| %>
-				<% if post.report? %>
+			<% @posts.published.each do |post| %>
 				<div class="image">
 					<% if post.images.attached? %>
 						<%= link_to post_path(post.id) do %>
@@ -34,7 +33,6 @@
 						<%= render partial: 'favorites/favorite_form', locals: { post: post, favorites: @favorites} %>
 					</div>
 				</div>
-			<% end %>
 			<% end %>
 			</div>
 
@@ -80,7 +78,6 @@
 	    cursor: default;
 		transform : translate(0, 50px);
 		transition:all 0.5s;
-		border-radius: 5px;
 		position: relative;
 	}
 	.layout {
@@ -95,10 +92,9 @@
 		transform : translate(0, 0);
 	}
 	.image img {
-		height: 200px;
-		width: 200px;
+		height: 100%;
+		width: 100%;
 		object-fit: contain;
-		/*position: relative;*/
 	}
 
 /*	.mask {
@@ -165,7 +161,7 @@
 
 <script>
 	$(document).ready(function(){
-		$('.slider').slick({
+		$('.slider').not('.slick-initialized').slick({
 			autoplay: true,
 			autoplaySpeed: 3000,
 			arrows: false,

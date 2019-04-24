@@ -2,7 +2,8 @@ class Post < ApplicationRecord
   belongs_to :price
   belongs_to :user
   has_many :favorites, dependent: :destroy
-  enum status: { report: 0, list: 1 }
+  # enum status: { published_: 0, draft: 1 }
+  enum status: %i(published draft)
   has_many_attached :images
   validates :title, presence: :true, length: { maximum: 50 }
 

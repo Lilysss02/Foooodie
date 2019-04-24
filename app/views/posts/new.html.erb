@@ -19,11 +19,6 @@
             </ul>
           <% end %>
 
-          <label>行ったお店</label>
-          <%= f.radio_button :status, :report, id: "reportRadioButton" %>
-          <label>行きたいお店</label>
-          <%= f.radio_button :status, :list, id: "listRadioButton" %>
-          <br>
           <label>レポート写真</label>
           <%= f.file_field :images, multiple: true, id: :imgInp %>
           <output id="list"></output>
@@ -44,6 +39,9 @@
             <%= f.text_field :url, id: "shop_url" %><br>
             <label>価格帯</label>
             <%= f.collection_select :price_id, Price.all, :id, :price_range %><br>
+
+            <%= f.check_box :status, {}, :draft, :published %>
+            <label>下書きに保存</label>
 
             <!-- place_idの保存 -->
             <%= f.hidden_field :shop_map, id: "shop_map" %>
@@ -77,15 +75,6 @@
 
 
 <script>
-////////////////////////// ラジオボタンの操作 //////////////////////////
-  $("#listRadioButton").on("click", function() {
-    $("#used_at").prop("disabled",true).css('background', '#ddd');
-  });
-  $("#reportRadioButton").on("click", function() {
-    $('#used_at').prop("disabled", false).css('background', '');
-  });
-
-
 /////////////////////////// 画像プレビュー ///////////////////////////
   document.getElementById('imgInp').onchange = function(event) {
     initializeFiles();

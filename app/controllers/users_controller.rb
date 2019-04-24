@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 	before_action :set_user, only: [:show, :edit, :update, :destroy, :following, :followers]
-
+	before_action :authenticate_user!
 	def show
 		@posts = @user.posts
 	end
@@ -11,13 +11,13 @@ class UsersController < ApplicationController
 	def update
 		if @user.update(user_params)
 			redirect_to user_path(current_user)
-			flash[:success] = "ユーザ情報が更新されました。"
+			flash[:success] = "ユーザ情報を更新しました。"
 		else
 			# if user.errors.messages[:user_name].include?(presence_error) then
 			# 	flash[:danger] = "ユーザ名が空欄です。"
 			# end
 			redirect_to edit_user_path(current_user.id)
-			flash[:warning] = "更新失敗しました。"
+			flash[:warning] = "ユーザ情報の更新に失敗しました。"
 		end
 	end
 

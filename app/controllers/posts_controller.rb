@@ -18,10 +18,10 @@ class PostsController < ApplicationController
     @post = Post.new(post_params)
     @post.user_id = current_user.id
     if @post.save
-      flash[:success] = "投稿が完了しました。"
+      flash[:success] = "投稿しました。"
       redirect_to post_path(@post.id)
     else
-      flash[:warning] = "投稿失敗しました。"
+      flash[:warning] = "投稿に失敗しました。"
       render 'new'
     end
   end
@@ -35,9 +35,18 @@ class PostsController < ApplicationController
   end
 
   def update
+    # @post.images.detach
+    # ActiveStorage::Attachmentのidを取得してPostモデルとBlobモデルのつながりを削除
+    # if params[:post][:images].each do |image_id|
+    #   image = @post.images.find(image_id)
+    #   image.purge
+    # end
+    # end
     if @post.update(post_params)
+      flash[:success] = "投稿を更新しました。"
       redirect_to post_path(@post.id)
     else
+      flash[:warning] = "更新に失敗しました。"
       render 'edit'
     end
   end
