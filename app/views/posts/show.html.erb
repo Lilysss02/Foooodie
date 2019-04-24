@@ -34,6 +34,7 @@
 
 		<br><br>
 		<div class="col-md-8">
+			<div id="star"></div>
 			<label>投稿日</label>
 			<%= @post.created_at.strftime('%Y年%m月%d日') %><br>
 			<label>タイトル</label>
@@ -129,6 +130,21 @@
 </style>
 
 <script>
+	$(function() {
+		$('#star').raty({
+	  		space: true,
+	  		half     : true,
+		    size     : 36,
+		    readOnly : true,
+		    starHalf : '/assets/star-half.png',
+		    starOff  : '/assets/star-off.png',
+		    starOn   : '/assets/star-on.png',
+		    score : '<%= @post.review %>'
+    	});
+	});
+
+
+
     $(document).ready(function(){
     	$('.slide').not('.slick-initialized').slick({
     		arrows: false,
