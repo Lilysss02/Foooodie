@@ -1,34 +1,109 @@
-<h1>お気に入り</h1>
 <div class="container">
 	<div class="row">
+		<div class="ribbon">
+			<h3>お気に入り</h3>
+		</div>
+		<% if @favorites.length == 0 %>
+			<h4>お気に入りはありません</h4>
+		<% end %>
+
+		<div class="layout">
 		<% @favorites.each do |favorite| %>
 			<div class="image">
 				<% if favorite.post.images.attached? %>
 					<%= link_to post_path(favorite.post.id) do %>
 						<%= image_tag favorite.post.images[0] %> <br>
 					<% end %>
-				<% else %>
-					<%= link_to post_path(post.id) do %>
-						<%= image_tag("no_image.jpg", size: "200x200") %>
-					<% end %>
-				<% end %><br>
-				<%= favorite.post.title %>
-				<%= link_to post_favorites_path(post_id: favorite.post.id), method: :delete, data: { confirm: '削除しますか？' } , class: "btn btn-default btn-xs" do %>
-					<i class="delete-icon glyphicon glyphicon-trash" aria-hidden="true"></i>
 				<% end %>
+				<%= link_to favorites_delete_path(favorite.post.id), method: :delete, data: { confirm: '削除しますか？' } , class: "btn btn-default btn-xs" do %>
+					<i class="glyphicon glyphicon-trash" aria-hidden="true"></i>
+				<% end %>
+				<br>
 			</div>
 		<% end %>
+		</div>
 	</div>
 </div>
 
 <style>
-	.image {
-		float: left;
-		width: 250px;
-		height: 250px;
+	.ribbon {
+	  display: inline-block;
+	  position: relative;
+	  height: 60px;
+	  line-height: 60px;
+	  text-align: center;
+	  padding: 7px 0;
+	  font-size: 18px;
+	  background: #acd879;
+	  color: #FFF;
+	  box-sizing: border-box;
+	  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
+	  margin-top: 20px;
+	  width: 300px;
 	}
-	img {
-		height: 200px;
-		margin: 5px;
+
+	.ribbon h3 {
+	  margin: 0;
+	  padding: 0 30px;
+	  border-top: dashed 2px rgba(255, 255, 255, 0.5);
+	  border-bottom: dashed 2px rgba(255, 255, 255, 0.5);
+	  line-height: 42px;
+	}
+
+	.ribbon:before, .ribbon:after {
+	  position: absolute;
+	  content: '';
+	  width: 0px;
+	  height: 0px;
+	  z-index: 1;
+	}
+
+	.ribbon:before {
+	  top: -2px;
+	  left: -2px;
+	  border-width: 32px 0px 32px 15px;
+	  border-color: transparent transparent transparent #fff;
+	  border-style: solid;
+	}
+
+	.ribbon:after {
+	  top: -2px;
+	  right: -2px;
+	  border-width: 32px 15px 32px 0px;
+	  border-color: transparent #fff transparent transparent;
+	  border-style: solid;
+	}
+
+	.image {
+		background-color: #fff;
+	    overflow: hidden;
+	    text-align: center;
+	    box-shadow: 3px 3px 6px #e6e6e6;
+	    cursor: default;
+		transform : translate(0, 50px);
+		transition:all 0.5s;
+		position: relative;;
+	}
+	.layout {
+		display: grid;
+		gap: 5px;
+  		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  		grid-template-rows: 200px 200px 200px 200px 200px auto;
+	}
+
+	.image.scrollin {
+		opacity : 1;
+		transform : translate(0, 0);
+	}
+	.image img {
+		height: 100%;
+		width: 100%;
+		object-fit: contain;
+	}
+	.btn.btn-default {
+		font-size: 10px;
+		position: absolute;
+		top: 177px;
+		right: 10px;
 	}
 </style>

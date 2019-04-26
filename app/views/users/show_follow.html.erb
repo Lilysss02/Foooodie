@@ -1,10 +1,106 @@
 <!-- フォローしている人の名前の一覧の画面 -->
-<% @user.followings.each do |user| %>
-<table>
-<tr>
-  <td>  <%= user.user_name %> </td>
-  <td><%= link_to '詳細', user_path(user) %></td>
-</tr>
+<div class="tab_wrap">
+	<div class="tab_area">
+		<label class="tab1_label" for="tab1">
+			<%= link_to "フォロー", following_user_path %>
+		</label>
+		<label class="tab2_label" for="tab2">
+			<%= link_to "フォロワー",followers_user_path %>
+		</label>
+	</div>
+	<div class="panel_area clearfix">
+		<div id="panel1" class="tab_panel clearfix">
 
-</table>
-<% end %>
+			<div class="">
+				<% if @user.followings.length == 0 %>
+					<h4>フォローしているユーザはいません</h4>
+				<% end %>
+			</div>
+
+			<% @user.followings.each do |user| %>
+			<table>
+				<tr>
+					<td>
+						<% if user.image.attached? %>
+							<%= image_tag user.image.variant(resize:"80x80").processed, class: "profile-image" %>
+						<% else %>
+							<%= image_tag("no_image.jpg", size: "80x80", class: "profile-image") %>
+						<% end %>
+					</td>
+					<td>
+						<%= link_to user_path(user), class: "user_name"  do %>
+							<%= user.user_name %>
+						<% end %>
+					</td>
+				</tr>
+			</table>
+			<% end %>
+		</div>
+	</div>
+</div>
+
+<style>
+	.profile-image {
+		border-radius: 40px
+	}
+	.user_name {
+		margin-left: 10px;
+	}
+	h4 {
+		padding: 100px 0;
+	}
+	.tab_wrap {
+		width: 800px;
+		margin: 80px auto;
+	}
+	.tab_area {
+		font-size: 0;
+		padding: 0 55px;
+	}
+	.tab_area label {
+		width: 330px;
+		display: inline-block;
+		padding: 14px 0 12px;
+		color: #fff;
+		text-align: center;
+		font-size: 13px;
+		cursor: pointer;
+		transition: ease 0.2s opacity;
+		border-top-left-radius: 10px;
+		border-top-right-radius: 10px;
+		vertical-align: bottom;
+		transition: ease 0.2s;
+		margin: 10px 5px 0;
+	}
+	.tab_area label:hover {
+		opacity: 0.7;
+	}
+	.tab_area label a {
+		text-decoration: none;
+		color: #fff;
+		display: block;
+	}
+	.tab_area label a:hover {
+		text-decoration: none;
+		color: #fff;
+	}
+	.tab1_label {
+		background: #acd879;
+	}
+	.tab2_label {
+		background: #ffc54d;
+	}
+	.panel_area {
+		background: #fafafa;
+		border: 5px solid #acd879;
+		border-radius: 10px;
+		padding: 40px 0;
+	}
+	.tab_panel{
+		width: 100%;
+		font-size: 14px;
+		letter-spacing: 1px;
+		text-align: center;
+		padding: 0 50px;
+	}
+</style>

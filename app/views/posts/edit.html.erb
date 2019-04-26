@@ -1,99 +1,125 @@
-  <div class="container">
-    <div class="row">
-        <div class="col-md-offset-3 col-md-6">
-            <h2>投稿編集ページ</h2>
-            <div class="images-field clearfix">
-                <%= form_with model: @post, local: true  do |f| %>
-                    <div class="form_area">
-                        <label>行ったお店</label>
-                        <%= f.radio_button :status, :report %>
-                        <label>行きたいお店</label>
-                        <%= f.radio_button :status, :list %>
-                        <br>
-                        <label>レポート写真</label>
-                        <%= f.file_field :images, multiple: true, id: :imgInp %>
-                        <output id="list"></output>
-                    </div>
-                    <br>
-                    <div class="form_area">
-                        <label>タイトル</label>
-                        <%= f.text_field :title %><br>
-                        <label>本文</label>
-                        <%= f.text_area :body %><br>
-                        <label>利用日</label>
-                        <%= f.date_field :used_at %><br>
-                        <label>店名</label>
-                        <%= f.text_field :shop_name, id: "shop_name" %><br>
-                        <label>住所</label>
-                        <%= f.text_field :shop_address, id: "shop_address" %><br>
-                        <!-- place_idの保存 -->
-                        <%= f.hidden_field :shop_map, id: "shop_map" %>
-                        <!-- 緯度(latitude)の保存 -->
-                        <%= f.hidden_field :latitude, id: "latitude" %>
-                        <!-- 経度(longitude)の保存 -->
-                        <%= f.hidden_field :longitude, id: "longitude" %>
-                        <label>URL</label>
-                        <%= f.text_field :url, id: "shop_url" %><br>
-                        <label>価格帯</label>
-                        <%= f.collection_select :price_id, Price.all, :id, :price_range %><br>
+<div class="container">
+  <div class="row">
+    <div class="col-md-offset-3 col-md-6">
+      <h2>投稿編集ページ</h2>
+      <br>
+      <br>
+      <div class="images-field clearfix">
+        <%= form_with model: @post, local: true  do |f| %>
+          <div class="form_area">
 
-                        <div class="pac-card" id="pac-card">
-                            <input id="pac-input" type="text" placeholder="Enter a location">
-                        </div>
+            <% if @post.images.attached? %>
+              <% @post.images.each do |image| %>
+                <%= image_tag image, class: "edit_img" %>
+              <% end %>
+            <% end %>
+            <br><br>
+            <%= f.file_field :images, multiple: true, id: :imgInp %>
+            <output id="list"></output>
+            <br>
 
-                        <div id="map"></div>
-                        <div id="infowindow-content">
-                          <img src="" width="16" height="16" id="place-icon">
-                          <span id="place-name"  class="title"></span><br>
-                          <span id="place-address"></span>
-                        </div>
+            <div id="star"></div><div id="hint" hidden></div>
+            <%= f.hidden_field :review, id: "review" %>
 
-                        <%= f.submit "更新", class: "btn btn-primary btn-sm" %>
-                <% end %>
-                <%= link_to "Back", post_path(@post) %>
-                </div>
+            <label>タイトル</label>
+            <%= f.text_field :title %><br>
+            <label>本文</label>
+            <%= f.text_area :body %><br>
+            <label id="used_at_label">利用日</label>
+            <%= f.date_field :used_at, id: "used_at" %><br>
+            <label>店名</label>
+            <%= f.text_field :shop_name, id: "shop_name" %><br>
+            <label>住所</label>
+            <%= f.text_field :shop_address, id: "shop_address" %><br>
+            <label>URL</label>
+            <%= f.text_field :url, id: "shop_url" %><br>
+            <label>価格帯</label>
+            <%= f.collection_select :price_id, Price.all, :id, :price_range %><br>
+
+            <%= f.check_box :status, {}, :draft, :published %>
+            <label>下書きに保存</label>
+
+            <!-- place_idの保存 -->
+            <%= f.hidden_field :shop_map, id: "shop_map" %>
+            <!-- 緯度(latitude)の保存 -->
+            <%= f.hidden_field :latitude, id: "latitude" %>
+            <!-- 経度(longitude)の保存 -->
+            <%= f.hidden_field :longitude, id: "longitude" %>
+
+            <div class="pac-card" id="pac-card">
+                <input id="pac-input" type="text" placeholder="Enter a location">
             </div>
-        </div>
+
+            <!-- GoogleMap情報 -->
+            <div id="map"></div>
+
+            <div id="infowindow-content">
+              <img src="" width="16" height="16" id="place-icon">
+              <span id="place-name"  class="title"></span><br>
+              <span id="place-address"></span>
+            </div>
+            <br>
+            <%= f.submit "更新", class: "btn btn-red btn-sm" %><br>
+            <%= link_to "Back", post_path(@post) %>
+          </div>
+          <br>
+        <% end %>
+      </div>
     </div>
+  </div>
 </div>
 
 <script>
-    document.getElementById('imgInp').onchange = function(event) {
-        initializeFiles();
-
-        var files = event.target.files;
-
-        for (var i = 0, f; f = files[i]; i++) {
-            var reader = new FileReader();
-            // var size = f.size;
-            // var limit = 50000;
-
-            // if ( limit < size ) {
-            //     alert('500KBを超えています。500KB以下のファイルを選択してください。');
-            //     f.value = '';
-            //     return;
-            // }
-
-            reader.readAsDataURL(f);
-
-            reader.onload = (function(theFile) {
-                return function(e) {
-                    var div = document.createElement('div');
-                    div.className = 'reader_file';
-                    div.innerHTML = '<div class="reader_title">' + encodeURIComponent(theFile.name) + '</div>';
-                    div.innerHTML += '<img class="reader_image" src="' + e.target.result + '" />';
-                    document.getElementById('list').insertBefore(div, null);
-                }
-            })(f);
+    $('#star').raty({
+        half     : true,
+        size     : 36,
+        starHalf : '/assets/star-half.png',
+        starOff  : '/assets/star-off.png',
+        starOn   : '/assets/star-on.png',
+        target   : '#hint',
+        targetType : 'number',
+        targetKeep : true,
+        click: function(score) {
+          $('#review').val(score);
         }
-    };
-    function initializeFiles() {
-        document.getElementById('list').innerHTML = '';
+    });
+
+/////////////////////////// 画像プレビュー ///////////////////////////
+  document.getElementById('imgInp').onchange = function(event) {
+    initializeFiles();
+
+    var files = event.target.files;
+
+    for (var i = 0, f; f = files[i]; i++) {
+      var reader = new FileReader();
+      // var size = f.size;
+      // var limit = 50000;
+
+      // if ( limit < size ) {
+      //     alert('500KBを超えています。500KB以下のファイルを選択してください。');
+      //     f.value = '';
+      //     return;
+      // }
+
+      reader.readAsDataURL(f);
+
+      reader.onload = (function(theFile) {
+        return function(e) {
+          var div = document.createElement('div');
+          div.className = 'reader_file';
+          div.innerHTML = '<div class="reader_title">' + encodeURIComponent(theFile.name) + '</div>';
+          div.innerHTML += '<img class="reader_image" src="' + e.target.result + '" />';
+          document.getElementById('list').insertBefore(div, null);
+        }
+      })(f);
     }
-/////////////////////// 画像プレビュー ///////////////////////
+  };
 
+  function initializeFiles() {
+    document.getElementById('list').innerHTML = '';
+  }
 
-/////////////////////// Google Map ///////////////////////
+/////////////////////////// Google Map ///////////////////////////
 var map;
 
 function init() {
@@ -196,86 +222,93 @@ init();
 </script>
 
 <style>
-    .reader_image {
-        width: 300px;
-        height: 300px;
-    }
-    .form_area {
-        float: left;
-        margin-right: 50px;
-    }
-    #map {
-        height: 400px;
-        width: 600px;
-    }
-    #description {
-        font-family: Roboto;
-        font-size: 15px;
-        font-weight: 300;
-      }
+  .edit_img {
+    height: 200px;
+  }
+  .reader_image {
+    width: 300px;
+    height: 300px;
+  }
 
-      #infowindow-content .title {
-        font-weight: bold;
-      }
+  .form_area {
+    float: left;
+    margin-right: 50px;
+  }
 
-      #infowindow-content {
-        display: none;
-      }
+  #map {
+    height: 400px;
+    width: 600px;
+  }
 
-      #map #infowindow-content {
-        display: inline;
-      }
+  #description {
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: 300;
+  }
 
-      .pac-card {
-        margin: 10px 10px 0 0;
-        border-radius: 2px 0 0 2px;
-        box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        outline: none;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-        background-color: #fff;
-        font-family: Roboto;
-      }
+  #infowindow-content .title {
+    font-weight: bold;
+  }
 
-      #pac-container {
-        padding-bottom: 12px;
-        margin-right: 12px;
-      }
+  #infowindow-content {
+    display: none;
+  }
 
-      .pac-controls {
-        display: inline-block;
-        padding: 5px 11px;
-      }
+  #map #infowindow-content {
+    display: inline;
+  }
 
-      .pac-controls label {
-        font-family: Roboto;
-        font-size: 13px;
-        font-weight: 300;
-      }
+  .pac-card {
+    margin: 10px 10px 0 0;
+    border-radius: 2px 0 0 2px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    outline: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    background-color: #fff;
+    font-family: Roboto;
+  }
 
-      #pac-input {
-        background-color: #fff;
-        font-family: Roboto;
-        font-size: 15px;
-        font-weight: 300;
-        margin-left: 12px;
-        padding: 0 11px 0 13px;
-        text-overflow: ellipsis;
-        width: 400px;
-      }
+  #pac-container {
+    padding-bottom: 12px;
+    margin-right: 12px;
+  }
 
-      #pac-input:focus {
-        border-color: #4d90fe;
-      }
+  .pac-controls {
+    display: inline-block;
+    padding: 5px 11px;
+  }
 
-      #title {
-        color: #fff;
-        background-color: #4d90fe;
-        font-size: 25px;
-        font-weight: 500;
-        padding: 6px 12px;
-      }
-      #target {
-        width: 345px;
-      }
+  .pac-controls label {
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: 300;
+  }
+
+  #pac-input {
+    background-color: #fff;
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: 300;
+    margin-left: 12px;
+    padding: 0 11px 0 13px;
+    text-overflow: ellipsis;
+    width: 400px;
+  }
+
+  #pac-input:focus {
+    border-color: #4d90fe;
+  }
+
+  #title {
+    color: #fff;
+    background-color: #4d90fe;
+    font-size: 25px;
+    font-weight: 500;
+    padding: 6px 12px;
+  }
+
+  #target {
+    width: 345px;
+  }
 </style>

@@ -1,69 +1,124 @@
 <div class="tab_wrap">
 	<div class="tab_area">
-		<label class="tab1_label active" for="tab1">行ったお店</label>
-		<label class="tab2_label" for="tab2">行きたいお店</label>
+		<label class="tab1_label active" for="tab1"><i class="fas fa-edit"></i>行ったお店</label>
+		<% if @user == current_user %>
+			<label class="tab2_label" for="tab2"><i class="fas fa-edit"></i>行ったお店(下書き)</label>
+		<% end %>
 	</div>
 
-	<div class="panel_area">
-		<div id="panel1" class="tab_panel active">
-			<!-- 行ったお店 -->
-			<% @posts.each do |post| %>
-				<% if post.report? %>
-					<% if post.images.attached? %>
-			    		<%= link_to post_path(post.id) do %>
-			    			<%= image_tag post.images[0]%>
-			    		<% end %>
-					<% else %>
-						<%= link_to post_path(post.id) do %>
-							<%= image_tag("no_image.jpg", size: "200x200") %>
-						<% end %>
-					<% end %><br>
-					<%= post.title %>
-					<br><br>
-				<% end %>
+	<div class="panel_area clearfix">
+		<div id="panel1" class="tab_panel active clearfix">
+			<% if @posts.published.length == 0 %>
+				<div class="posts_length">
+					<h4>投稿がありません</h4>
+				</div>
 			<% end %>
+			<div class="layout">
+				<% @posts.published.each do |post| %>
+
+						<div class="image">
+							<% if post.images.attached? %>
+					    		<%= link_to post_path(post.id) do %>
+					    			<%= image_tag post.images[0]%>
+					    		<% end %>
+							<% end %>
+
+							<div id="favorites_buttons_<%= post.id %>">
+								<%= render partial: 'favorites/favorite_form', locals: { post: post, favorites: @favorites} %>
+							</div>
+						</div>
+				<% end %>
+			</div>
 		</div>
 
-		<div id="panel2" class="tab_panel">
-			<!-- 行きたいお店 -->
-			<% @posts.each do |post| %>
-				<% if post.list? %>
-					<% if post.images.attached? %>
-		    			<%= link_to post_path(post.id) do %>
-		    				<%= image_tag post.images[0] %>
-		    			<% end %>
-					<% else %>
-						<%= link_to post_path(post.id) do %>
-							<%= image_tag("no_image.jpg", size: "200x200") %>
-						<% end %>
-					<% end %><br>
-					<%= post.title %>
-					<br><br>
-				<% end %>
+		<div id="panel2" class="tab_panel clearfix">
+			<% if @posts.draft.length == 0 %>
+				<div class="posts_length">
+					<h4>下書きはありません</h4>
+				</div>
 			<% end %>
+			<div class="layout">
+				<% @posts.draft.each do |post| %>
+
+						<div class="image">
+							<% if post.images.attached? %>
+				    			<%= link_to post_path(post.id) do %>
+				    				<%= image_tag post.images[0] %>
+				    			<% end %>
+							<% end %>
+						</div>
+
+				<% end %>
+			</div>
 		</div>
 
 	</div>
 </div>
+<section id="deleteArea" class="modalArea">
+	<div id="deleteBg" class="modalBg"></div>
+	<div class="modalWrapper">
+		<div class="modalContents">
+			<h3>お気に入りから削除しました！</h3>
+		</div>
+		<div id="delcloseModal" class="closeModal"> × </div>
+	</div>
+</section>
+<section id="favoriteArea" class="modalArea">
+	<div id="favoriteBg" class="modalBg"></div>
+		<div class="modalWrapper">
+			<div class="modalContents">
+				<h3>お気に入りに登録しました！</h3>
+			</div>
+		<div id="favcloseModal" class="closeModal"> × </div>
+	</div>
+</section>
 
 <style>
-	img {
-		width: 200px;
+	.posts_length {
+		padding-top: 100px;
+		text-align: center;
 	}
+	.image {
+		background-color: #fff;
+	    overflow: hidden;
+	    text-align: center;
+	    box-shadow: 3px 3px 6px #e6e6e6;
+	    cursor: default;
+		transform : translate(0, 50px);
+		transition:all 0.5s;
+		position: relative;
+	}
+	.layout {
+		display: grid;
+		gap: 10px;
+	    grid-auto-rows: 200px;
+	    grid-template-columns: repeat(auto-fit, 200px);
+	    justify-content: center;
+	}
+
+	.image.scrollin {
+		opacity : 1;
+		transform : translate(0, 0);
+	}
+	.image img {
+		height: 100%;
+		width: 100%;
+		object-fit: contain;
+	}
+
 	.tab_wrap {
 		width: 800px;
-		margin: 80px auto;
+		margin: 0 auto;
 	}
 	.tab_area {
 		font-size: 0;
 		padding: 0 55px;
 	}
 	.tab_area label {
-		width: 110px;
+		width: 335px;
 		display: inline-block;
 		padding: 14px 0 12px;
 		color: #fff;
-		background: #90c9cc;
 		text-align: center;
 		font-size: 13px;
 		cursor: pointer;
@@ -72,32 +127,77 @@
 		border-top-right-radius: 10px;
 		vertical-align: bottom;
 		transition: ease 0.2s;
-		margin:10px 5px 0;
+		margin: 20px 5px 0;
+	}
+	.tab1_label {
+		background: #acd879;
+	}
+	.tab2_label {
+		background: #ffc54d;
 	}
 	.tab_area label:hover {
-		opacity: 0.5;
-	}
-	.tab_area label.active {
-		color: #000;
-		opacity: 0.5;
+		opacity: 0.8;
 	}
 	.panel_area {
-		background: #ddd;
+		background: #fafafa;
 		border-bottom-right-radius: 10px;
 		border-bottom-left-radius: 10px;
-		border-top: 8px solid #d7e9ea;
+		padding-bottom: 100px;
+		border-right: solid 1px #ddd;
+		border-left: solid 1px #ddd;
+		border-bottom: solid 1px #ddd;
+		margin-bottom: 20px;
+	}
+	#panel1 {
+		border-top: 8px solid #acd879;
+	}
+	#panel2 {
+		border-top: 8px solid #ffc54d;
 	}
 	.tab_panel{
 		width: 100%;
-		padding: 80px 0;
+		padding: 0 80px;
 		display: none;
 		font-size: 14px;
 		letter-spacing: 1px;
-		text-align: center;
-		position: relative;
 	}
 	.tab_panel.active {
 		display: block;
+	}
+
+	/* モーダルCSS */
+	.modalArea {
+	  display: none;
+	  position: fixed;
+	  z-index: 10; /*ここの数値は調整 */
+	  top: 0;
+	  left: 0;
+	  width: 100%;
+	  height: 100%;
+	}
+
+	.modalBg {
+	  width: 100%;
+	  height: 100%;
+	  background-color: rgba(30,30,30,0.9);
+	}
+
+	.modalWrapper {
+	  position: absolute;
+	  top: 50%;
+	  left: 50%;
+	  transform:translate(-50%,-50%);
+	  width: 70%;
+	  max-width: 500px;
+	  padding: 10px 30px;
+	  background-color: #fff;
+	}
+
+	.closeModal {
+	  position: absolute;
+	  top: 0.5rem;
+	  right: 1rem;
+	  cursor: pointer;
 	}
 </style>
 

@@ -5,31 +5,59 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" >
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/luminous-lightbox/2.3.2/luminous-basic.min.css">
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
 
-    <script ></script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=<%= Rails.application.credentials.dig(:api_key, :google) %>&libraries=places"></script>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/luminous-lightbox/2.3.2/luminous.min.js"></script>
   </head>
 
   <body>
-    <nav class="navbar navbar-inverse">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#">Portfolio</a>
+    <div class="wrapper">
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <div class="navbar-brand">Foooodie</div>
+          </div>
+          <ul class="nav navbar-nav">
+            <li><%= link_to "Home", root_path, class: "fa fa-home" %></li>
+
+            <% if user_signed_in? %>
+              <li><%= link_to "MyPage", user_path(current_user), class: "fas fa-user" %></li>
+              <li><%= link_to "Favorites", favorites_index_path, class: "fas fa-heart" %></li>
+              <li><%= link_to "LogOut", destroy_user_session_path, method: :delete, class: "fas fa-sign-out-alt" %></li>
+              <li>
+              <dl class="searchbox">
+                <%= search_form_for @search, url: root_path do |f| %>
+                <dt><%= f.text_field :title_or_body_or_shop_name_or_shop_address_cont ,placeholder: 'フリーワード検索' %></dt>
+                <dd><%= f.submit "検索" , class: "search-btn" %></dd>
+                <% end %>
+              </dl>
+              </li>
+              <li id="user_name">
+                <% if current_user.image.attached? %>
+                  <%= image_tag @user.image.variant(resize:"30x30").processed, class: "top-profile-image" %>
+                <% else %>
+                  <%= image_tag("no_image.jpg", size: "30x30", class: "top-profile-image") %>
+                <% end %>
+                <%= current_user.user_name %>
+              </li>
+
+            <% else %>
+
+              <li><%= link_to "LogIn", new_user_session_path, class: "fas fa-sign-in-alt" %></li>
+              <li><%= link_to "SignUp", new_user_registration_path, class: "fas fa-seedling" %></li>
+            <% end %>
+          </ul>
         </div>
-        <ul class="nav navbar-nav">
-          <li><%= link_to "Home", root_path %></li>
-          <% if user_signed_in? %>
-            <li><%= link_to "MyPage", user_path(current_user) %></li>
-            <li><%= link_to "Favorites", favorites_index_path %></li>
-            <li><%= link_to "LogOut", destroy_user_session_path, method: :delete %></li>
-          <% else %>
-            <li><%= link_to "LogIn", new_user_session_path %></li>
-            <li><%= link_to "SignUp", new_user_registration_path %></li>
-          <% end %>
-        </ul>
-      </div>
-    </nav>
-    <%= yield %>
+      </nav>
+      <%= yield %>
+      <footer><p><i class="far fa-copyright"></i> 2019 foodie </p></footer>
+    </div>
   </body>
 </html>

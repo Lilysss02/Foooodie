@@ -4,39 +4,106 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-offset-3 col-md-6">
-			<h1>マイページ</h1>
+			<div class="ribbon">
+				<h3>マイページ</h3>
+			</div>
+    	<div class="col-md-10 col-md-offset-2">
 			<br>
 			<br>
-			<% if @user.image.attached? %>
-				<%= image_tag @user.image.variant(resize:"200x200").processed, class: "profile-image" %>
-			<% else %>
-			    <%= image_tag("no_image.jpg", size: "200x200") %>
+			<div class="profile-area">
+				<div class="profile-image-area">
+					<% if @user.image.attached? %>
+						<%= image_tag @user.image.variant(resize:"180x180").processed, class: "profile-image" %>
+					<% else %>
+					    <%= image_tag("no_image.jpg", size: "180x180", class: "profile-image") %>
+					<% end %>
+				</div>
+				<br>
+				<div class="user_name">
+					<strong><%= @user.user_name %></strong>
+				</div>
+			<% if @user == current_user %>
+				<%= link_to "ユーザ編集", edit_user_path(current_user.id), class: "btn btn-green btn-sm" %>
+				<%= link_to "新規投稿", new_post_path, class: "btn btn-orange btn-sm" %>
 			<% end %>
-			<%= @user.user_name %>
+			<br>
 
 			<!-- フォロー／フォロワー数 -->
 		    <section class="stats">
 		      <%= render 'stats' %>
 		    </section>
-
+		    <br>
 		    <!-- フォロー用フォーム -->
     		<%= render 'follow_form' %>
-
-			<br>
-			<%= link_to "ユーザ編集", edit_user_path(current_user.id) %>
-			<br>
-			<%= link_to "新規投稿", new_post_path %>
 			<br>
 			<br>
+			</div>
 		</div>
+
 		<!-- ユーザの投稿一覧 -->
 		<%= render 'posts/show_tab' %>
 	</div>
 </div>
 
 <style>
-	.profile-image {
-		border-radius: 100px
+	.ribbon {
+	  display: inline-block;
+	  position: relative;
+	  height: 60px;
+	  line-height: 60px;
+	  text-align: center;
+	  padding: 7px 0;
+	  font-size: 18px;
+	  background: #acd879;
+	  color: #FFF;
+	  box-sizing: border-box;
+	  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
+	  margin-top: 20px;
+	  width: 300px;
 	}
+	.ribbon h3 {
+	  margin: 0;
+	  padding: 0 30px;
+	  border-top: dashed 2px rgba(255, 255, 255, 0.5);
+	  border-bottom: dashed 2px rgba(255, 255, 255, 0.5);
+	  line-height: 42px;
+	}
+	.ribbon:before, .ribbon:after {
+	  position: absolute;
+	  content: '';
+	  width: 0px;
+	  height: 0px;
+	  z-index: 1;
+	}
+	.ribbon:before {
+	  top: -2px;
+	  left: -2px;
+	  border-width: 32px 0px 32px 15px;
+	  border-color: transparent transparent transparent #fff;
+	  border-style: solid;
+	}
+	.ribbon:after {
+	  top: -2px;
+	  right: -2px;
+	  border-width: 32px 15px 32px 0px;
+	  border-color: transparent #fff transparent transparent;
+	  border-style: solid;
+	}
+	.profile-area {
+		width: 100%;
+		float: left;
+		margin: 0 auto;
+	}
+	.profile-image-area {
+		width: 200px;
+		float: left;
+		margin: 0 30px 0 0;
+	}
+	.profile-image {
+		border-radius: 90px;
+	}
+	.user_name {
+		margin-left: 10px;
+	}
+
 </style>

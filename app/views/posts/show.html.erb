@@ -2,73 +2,166 @@
     <p class="alert alert-success"><%= flash[:success] %></p>
 <% end %>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-10 col-md-offset-1">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
         	<%= link_to user_path(@post.user) do %>
         		<%= @post.user.user_name %>
         	<% end %>
         	<br>
 
-			<% if @post.report? %>
-				<div class="status report">行ったお店</div>
+			<% if @post.published? %>
+				<div class="status published">行ったお店</div>
 			<% else %>
-				<div class="status list">行きたいお店</div>
+				<div class="status draft">行ったお店(下書き)</div>
 			<% end %>
+
 
 			<% if @post.images.attached? %>
-			  <% @post.images.each do |image| %>
-			    <%= image_tag image %>
-			  <% end %>
+				<div class="slide">
+				<% @post.images.each do |image| %>
+					<div class="image">
+						<%= link_to rails_blob_path(image) do %>
+							<%= image_tag image %>
+						<% end %>
+					</div>
+				<% end %>
 			<% else %>
-				<%= image_tag("no_image.jpg", size: "300x300") %>
+				<%= image_tag("noimage.gif") %>
+				</div>
 			<% end %>
+		</div>
 
-			<div class="col-md-8">
-				<label>タイトル</label>
-				<%= @post.title %><br>
-				<label>本文</label>
-				<!-- posts_helperに記載 -->
-				<%= render_with_hashtags(@post.body) %><br>
-                <label>利用日</label>
-                <%= @post.used_at %><br>
-                <label>店名</label>
-                <%= @post.shop_name %><br>
-                <label>住所</label>
-                <%= @post.shop_address %><br>
-                <label>URL</label>
-                <%= @post.url %><br>
-                <label>価格帯</label>
-                <%= @post.price.price_range %>
-			</div>
+		<br><br>
+		<div class="col-md-8 col-md-offset-2">
+			<div id="star"></div>
+			<label>投稿日</label>
+			<%= @post.created_at.strftime('%Y年%m月%d日') %><br>
+			<label>タイトル</label>
+			<%= @post.title %><br>
+			<label>本文</label>
+			<!-- posts_helperに記載 -->
+			<%= render_with_hashtags(@post.body) %><br>
+            <label>利用日</label>
+            <%= @post.used_at %><br>
+            <label>店名</label>
+            <%= @post.shop_name %><br>
+            <label>住所</label>
+            <%= @post.shop_address %><br>
+            <label>URL</label>
+            <%= link_to "#{@post.url}", @post.url %><br>
+            <label>価格帯</label>
+            <%= @post.price.price_range %>
 
-			<br>
-			<br>
+		<br>
 
-			<div class="col-md-8">
-				<%= link_to "編集", edit_post_path(@post.id) %> | <%= link_to "削除", post_path, method: :delete, "data-confirm" => "削除しますか？" %>
-			</div>
+		<% if @post.user == current_user %>
+				<%= link_to "編集", edit_post_path(@post.id), class: "fas fa-edit" %> | <%= link_to "削除", post_path, method: :delete, "data-confirm" => "削除しますか？", class: "fas fa-trash-alt" %>
+		<% end %>
 		</div>
 	</div>
-</div>
-<iframe width="600" height="450" frameborder="0" style="border:0" src="" allowfullscreen></iframe>
+	<br>
+	<div class="map">
+		<iframe width="600" height="450" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?key=<%= Rails.application.credentials.dig(:api_key, :google) %>&q=place_id:<%= @post.shop_map %>" allowfullscreen></iframe>
+	</div>
+
+
 <style>
-	img {
-		float: left;
+	.row {
+		margin-top: 30px;
+	}
+	.image {
+		background-color: #fff;
+		margin: 10px;
+		width: 200px;
+	}
+	.slide img {
 		height: 200px;
-		margin: 5px;
+		width: 100%;
+		margin: 0 auto;
+		object-fit: contain;
+	}
+	#star img {
+		height: 16px;
+		width: 16px;
 	}
 
 	.status {
 		color: #fff;
 		border-radius: 10px;
-		width: 120px;
 		text-align: center;
 	}
-	.report {
-		background-color: #c090cc;
+	.published {
+		background-color: #acd879;
+		width: 120px;
 	}
-	.list {
-		background-color: #90c9cc;
+	.draft {
+		background-color: #ffc54d;
+		width: 150px;
 	}
+
+/* スライドショー設定 */
+	button{
+		margin: 0;
+		padding: 0;
+		background: none;
+		border: none;
+		border-radius: 0;
+		outline: none;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+	}
+
+	.slide-dots {
+  		text-align: center;
+  	}
+  	.slide-dots li {
+    	display: inline-block;
+    	margin: 0 15px;
+    }
+    .slide-dots li button {
+    	position: relative;
+    	text-indent: -9999px;
+    }
+    .slide-dots li button:before {
+        content: '○';
+        font-size: 20px;
+        text-indent: 0px;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    .slide-dots .slick-active button:before {
+        content: '●';
+    }
+    .map {
+    	margin: 0 0 20px 350px;
+    }
 </style>
+
+<script>
+	$(function() {
+		$('#star').raty({
+	  		space: true,
+	  		half     : true,
+		    size     : 36,
+		    readOnly : true,
+		    starHalf : '/assets/star-half.png',
+		    starOff  : '/assets/star-off.png',
+		    starOn   : '/assets/star-on.png',
+		    score : '<%= @post.review %>'
+    	});
+	});
+
+    $(document).ready(function(){
+    	$('.slide').not('.slick-initialized').slick({
+    		arrows: false,
+    		slidesToShow: 3,
+    		slidesToScroll: 1,
+    		autoplay: false,
+    		dots: true,
+    		dotsClass: 'slide-dots',
+    		infinite: false,
+		});
+	});
+</script>

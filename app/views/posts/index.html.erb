@@ -1,25 +1,25 @@
-<h1>TOPページ</h1>
+<div class="slider">
+	<div class=""><%= image_tag 'sweets.jpg' %></div>
+	<div class=""><%= image_tag 'party.jpg' %></div>
+</div>
 
 <div class="container">
     <div class="row">
-        <div class="col-md-offset-2 col-md-8">
-        	<!-- 検索フォーム -->
-        	<%= search_form_for @search do |s| %>
-        		<div class="form-group">
-        			<%= s.search_field :title_or_body_or_shop_name_or_shop_address_cont, placeholder: "フリーワード検索", class: "form-control" %>
-			  	</div>
-			  	<div class="actions"><%= s.submit "Search", class: "btn btn-primary" %></div>
-			<% end %>
-			<br>
-
-			<% @posts.each do |post| %>
+		<div class="layout">
+			<% @posts.published.each do |post| %>
 				<div class="image">
 					<% if post.images.attached? %>
 						<%= link_to post_path(post.id) do %>
 							<%= image_tag post.images[0] %>
 						<% end %>
-					<% end %><br>
-					<%= post.title %>
+					<% end %>
+					<div class="mask">
+						<%= link_to post_path(post.id), class: "title" do %>
+						<div class="caption">
+							<%= post.title %>
+						</div>
+						<% end %>
+					</div><br>
 					<!-- お気に入り登録 -->
 					<div id="favorites_buttons_<%= post.id %>">
 						<%= render partial: 'favorites/favorite_form', locals: { post: post, favorites: @favorites} %>
@@ -27,17 +27,164 @@
 				</div>
 			<% end %>
 		</div>
+		<div class="space"></div>
 	</div>
 </div>
+<section id="deleteArea" class="modalArea">
+	<div id="deleteBg" class="modalBg"></div>
+	<div class="modalWrapper">
+		<div class="modalContents">
+			<h3>お気に入りから削除しました！</h3>
+		</div>
+		<div id="delcloseModal" class="closeModal"> × </div>
+	</div>
+</section>
+<section id="favoriteArea" class="modalArea">
+	<div id="favoriteBg" class="modalBg"></div>
+		<div class="modalWrapper">
+			<div class="modalContents">
+				<h3>お気に入りに登録しました！</h3>
+			</div>
+		<div id="favcloseModal" class="closeModal"> × </div>
+	</div>
+</section>
 
 <style>
-	.image {
-		float: left;
-		width: 250px;
-		height: 250px;
+	.slider {
+		width: 100%;
+		height: 500px;
 	}
-	img {
+	.slider img {
+		width: 100%;
+		height: 500px;
+		object-fit: cover;
+	}
+	.actions {
+		text-align: center;
+	}
+	.form-group {
+		margin: 10px auto;
+		width: 500px;
+	}
+	.form-control {
+		text-align: center;
+	}
+	.image {
+		background-color: #fff;
+	    overflow: hidden;
+	    text-align: center;
+	    box-shadow: 3px 3px 6px #e6e6e6;
+	    cursor: default;
+		transform : translate(0, 50px);
+		transition:all 0.5s;
+		position: relative;
+	}
+	.layout {
+		display: grid;
+		gap: 10px;
+	    grid-auto-rows: 200px;
+	    grid-template-columns: repeat(auto-fit, 200px);
+	    justify-content: center; /* グリッド全体を中央に寄せる設定 */
+	}
+	.space {
+		width: 100%;
+		height: 100px;
+	}
+	.image.scrollin {
+		opacity : 1;
+		transform : translate(0, 0);
+	}
+	.image img {
+		height: 100%;
+		width: 100%;
+		object-fit: contain;
+	}
+
+	.mask {
+		width: 268px;
 		height: 200px;
-		margin: 5px;
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		opacity:		0;
+		overflow: hidden;
+		background-color:	rgba(0,0,0,0.3);
+		transition:all 0.7s ease;
+	}
+	.mask:hover {
+		opacity: 1;
+	}
+	.caption {
+		font-family: Georgia, serif;
+		font-style: italic;
+		font-size: 15px;
+		padding-top: 90px;
+		padding-bottom: 90px;
+		color: #fff;
+	}
+	h3 {
+		text-align: center;
+	}
+
+	/* モーダルCSS */
+	.modalArea {
+	  display: none;
+	  position: fixed;
+	  z-index: 10; /*ここの数値は調整 */
+	  top: 0;
+	  left: 0;
+	  width: 100%;
+	  height: 100%;
+	}
+
+	.modalBg {
+	  width: 100%;
+	  height: 100%;
+	  background-color: rgba(30,30,30,0.9);
+	}
+
+	.modalWrapper {
+	  position: absolute;
+	  top: 50%;
+	  left: 50%;
+	  transform:translate(-50%,-50%);
+	  width: 70%;
+	  max-width: 500px;
+	  padding: 10px 30px;
+	  background-color: #fff;
+	}
+
+	.closeModal {
+	  position: absolute;
+	  top: 0.5rem;
+	  right: 1rem;
+	  cursor: pointer;
 	}
 </style>
+
+<script>
+	$(document).ready(function(){
+		$('.slider').not('.slick-initialized').slick({
+			autoplay: true,
+			autoplaySpeed: 3000,
+			arrows: false,
+			dots: false,
+			fade: true,
+			speed: 300
+		});
+	});
+
+	jQuery(function(){
+		jQuery(window).scroll(function (){
+			jQuery('.fadein').each(function(){
+				var elemPos = jQuery(this).offset().top;
+            	var scroll = jQuery(window).scrollTop();
+            	var windowHeight = jQuery(window).height();
+            	if (scroll > elemPos - windowHeight + 0){
+            		jQuery(this).addClass('scrollin');
+            	}
+            });
+		});
+		jQuery(window).scroll();
+	});
+</script>

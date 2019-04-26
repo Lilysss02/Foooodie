@@ -2,8 +2,12 @@ class Post < ApplicationRecord
   belongs_to :price
   belongs_to :user
   has_many :favorites, dependent: :destroy
-  enum status: { report: 0, list: 1 }
+  # enum status: { published_: 0, draft: 1 }
+  enum status: %i(published draft)
   has_many_attached :images
+  validates :title, presence: :true, length: { maximum: 50 }
+
+  validate :images_type
 
   def favorited_by?(user)
     favorites.where(user_id: user.id).exists?
@@ -28,6 +32,19 @@ class Post < ApplicationRecord
   		tag = Tag.find_or_create_by(name: hashtag.downcase.delete('#'))
   		post.tags << tag
   	end
+  end
+
+  private
+
+  def images_type
+    if images.attached? == false
+      errors.add(:images, "を選択してください")
+    end
+    images.each do |image|
+      if !image.content_type.in?(%('image/jpeg image/png'))
+        errors.add(:images, 'needs to be a JPEG or PNG')
+      end
+    end
   end
 
 end
