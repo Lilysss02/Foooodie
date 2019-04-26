@@ -38,7 +38,7 @@ class Post < ApplicationRecord
 
   def images_type
     if images.attached? == false
-      errors.add(:images, "are missing!")
+      errors.add(:images, "を選択してください")
     end
     images.each do |image|
       if !image.content_type.in?(%('image/jpeg image/png'))

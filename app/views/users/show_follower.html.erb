@@ -20,7 +20,7 @@
 						<% if user.image.attached? %>
 							<%= image_tag user.image.variant(resize:"80x80").processed, class: "profile-image" %>
 						<% else %>
-							<%= image_tag("no_image.jpg", size: "80x80") %>
+							<%= image_tag("no_image.jpg", size: "80x80", class: "profile-image") %>
 						<% end %>
 					</td>
 					<td>
@@ -43,7 +43,9 @@
 	.user_name {
 		margin-left: 10px;
 	}
-
+	h4 {
+		padding: 100px 0;
+	}
 	.tab_wrap {
 		width: 800px;
 		margin: 80px auto;
@@ -57,7 +59,6 @@
 		display: inline-block;
 		padding: 14px 0 12px;
 		color: #fff;
-/*		background: #90c9cc;*/
 		text-align: center;
 		font-size: 13px;
 		cursor: pointer;
@@ -67,6 +68,9 @@
 		vertical-align: bottom;
 		transition: ease 0.2s;
 		margin:10px 5px 0;
+	}
+	.tab_area label:hover {
+		opacity: 0.7;
 	}
 	.tab_area label a {
 		text-decoration: none;
@@ -78,19 +82,14 @@
 		color: #fff;
 	}
 	.tab1_label {
-		background: #c090cc;
-	}
-	.tab1_label:hover {
-		opacity: 0.5;
+		background: #acd879;
 	}
 	.tab2_label {
-		background: #90c9cc;
+		background: #ffc54d;
 	}
 	.panel_area {
-		background: #fff;
-		/*border-bottom-right-radius: 10px;
-		border-bottom-left-radius: 10px;*/
-		border: 5px solid #90c9cc;
+		background: #fafafa;
+		border: 5px solid #ffc54d;
 		border-radius: 10px;
 		padding: 40px 0;
 	}

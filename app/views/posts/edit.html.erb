@@ -8,10 +8,8 @@
         <%= form_with model: @post, local: true  do |f| %>
           <div class="form_area">
 
-            <label>現在登録されている画像（削除するものはチェックしてください）</label>
             <% if @post.images.attached? %>
               <% @post.images.each do |image| %>
-                <%= f.check_box :images, {:multiple => true}, image.id, false %>
                 <%= image_tag image, class: "edit_img" %>
               <% end %>
             <% end %>
@@ -61,7 +59,7 @@
               <span id="place-address"></span>
             </div>
             <br>
-            <%= f.submit "更新", class: "btn btn-primary btn-sm" %><br>
+            <%= f.submit "更新", class: "btn btn-red btn-sm" %><br>
             <%= link_to "Back", post_path(@post) %>
           </div>
           <br>

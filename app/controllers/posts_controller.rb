@@ -3,8 +3,8 @@ class PostsController < ApplicationController
 
   def index
   	# @posts = Post.all
-    @search = Post.search(params[:q])
-    @posts = @search.result
+    # @search = Post.search(params[:q])
+    # @posts = @search.result
   end
 
   def show
@@ -35,13 +35,14 @@ class PostsController < ApplicationController
   end
 
   def update
-    # @post.images.detach
+    @post.images.detach
     # ActiveStorage::Attachmentのidを取得してPostモデルとBlobモデルのつながりを削除
     # if params[:post][:images].each do |image_id|
     #   image = @post.images.find(image_id)
     #   image.purge
     # end
     # end
+
     if @post.update(post_params)
       flash[:success] = "投稿を更新しました。"
       redirect_to post_path(@post.id)

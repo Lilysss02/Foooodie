@@ -22,4 +22,10 @@ test:
 
 production:
   <<: *default
-  database: db/production.sqlite3
+  # database: meshiterro
+  adapter: mysql2
+  encoding: utf8mb4
+  collation: utf8mb4_general_ci
+  # host: RDSのエンドポイント名
+  # username: RDSの接続ユーザ名
+  # password: RDSのパスワード

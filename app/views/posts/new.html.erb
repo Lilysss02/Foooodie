@@ -4,20 +4,21 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-offset-3 col-md-8">
+    <div class="col-md-offset-2 col-md-8">
       <h2>新規投稿</h2>
       <br>
       <br>
       <div class="images-field clearfix">
         <%= form_with model: @post, local: true  do |f| %>
           <% if @post.errors.any? %>
-            <h2><%= pluralize(@post.errors.count, "error") %> prohibited this post from being saved:</h2>
+            <h4><%= pluralize(@post.errors.count, "") %> 件のエラーにより投稿できません</h4>
             <ul>
               <% @post.errors.full_messages.each do |message| %>
                 <li><%= message %></li>
               <% end %>
             </ul>
           <% end %>
+
 
           <label>レポート写真</label>
           <%= f.file_field :images, multiple: true, id: :imgInp %>
@@ -68,7 +69,7 @@
               <span id="place-address"></span>
             </div>
             <br>
-            <%= f.submit "投稿", class: "btn btn-primary btn-sm" %>
+            <%= f.submit "投稿", class: "btn btn-orange btn-sm" %>
           </div>
           <br>
         <% end %>

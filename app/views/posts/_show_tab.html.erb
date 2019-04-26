@@ -1,14 +1,13 @@
 <div class="tab_wrap">
 	<div class="tab_area">
-		<label class="tab1_label active" for="tab1">行ったお店</label>
+		<label class="tab1_label active" for="tab1"><i class="fas fa-edit"></i>行ったお店</label>
 		<% if @user == current_user %>
-			<label class="tab2_label" for="tab2">行ったお店(下書き)</label>
+			<label class="tab2_label" for="tab2"><i class="fas fa-edit"></i>行ったお店(下書き)</label>
 		<% end %>
 	</div>
 
 	<div class="panel_area clearfix">
 		<div id="panel1" class="tab_panel active clearfix">
-			<!-- 行ったお店 -->
 			<% if @posts.published.length == 0 %>
 				<div class="posts_length">
 					<h4>投稿がありません</h4>
@@ -33,7 +32,6 @@
 		</div>
 
 		<div id="panel2" class="tab_panel clearfix">
-			<!-- 行きたいお店 -->
 			<% if @posts.draft.length == 0 %>
 				<div class="posts_length">
 					<h4>下書きはありません</h4>
@@ -92,9 +90,10 @@
 	}
 	.layout {
 		display: grid;
-		gap: 5px;
-  		grid-template-columns: 1fr 1fr 1fr;
-  		grid-template-rows: 200px 200px 200px auto;
+		gap: 10px;
+	    grid-auto-rows: 200px;
+	    grid-template-columns: repeat(auto-fit, 200px);
+	    justify-content: center;
 	}
 
 	.image.scrollin {
@@ -109,14 +108,14 @@
 
 	.tab_wrap {
 		width: 800px;
-		margin: 20px auto;
+		margin: 0 auto;
 	}
 	.tab_area {
 		font-size: 0;
 		padding: 0 55px;
 	}
 	.tab_area label {
-		width: 180px;
+		width: 335px;
 		display: inline-block;
 		padding: 14px 0 12px;
 		color: #fff;
@@ -128,41 +127,39 @@
 		border-top-right-radius: 10px;
 		vertical-align: bottom;
 		transition: ease 0.2s;
-		margin: 10px 5px 0;
+		margin: 20px 5px 0;
 	}
 	.tab1_label {
-		background: #c090cc;
+		background: #acd879;
 	}
 	.tab2_label {
-		background: #90c9cc;
+		background: #ffc54d;
 	}
 	.tab_area label:hover {
-		opacity: 0.5;
+		opacity: 0.8;
 	}
-/*	.tab_area label.active {
-		color: #fff;
-		opacity: 0.5;
-	}*/
 	.panel_area {
-		background: #ddd;
+		background: #fafafa;
 		border-bottom-right-radius: 10px;
 		border-bottom-left-radius: 10px;
-/*		border-top: 8px solid #d7e9ea;*/
 		padding-bottom: 100px;
+		border-right: solid 1px #ddd;
+		border-left: solid 1px #ddd;
+		border-bottom: solid 1px #ddd;
+		margin-bottom: 20px;
 	}
 	#panel1 {
-		border-top: 8px solid #c090cc;
+		border-top: 8px solid #acd879;
 	}
 	#panel2 {
-		border-top: 8px solid #90c9cc;
+		border-top: 8px solid #ffc54d;
 	}
 	.tab_panel{
 		width: 100%;
-		padding: 0 100px;
+		padding: 0 80px;
 		display: none;
 		font-size: 14px;
 		letter-spacing: 1px;
-		/*text-align: center;*/
 	}
 	.tab_panel.active {
 		display: block;
