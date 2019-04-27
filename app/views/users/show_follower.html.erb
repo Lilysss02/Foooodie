@@ -20,7 +20,7 @@
 						<% if user.image.attached? %>
 							<%= image_tag user.image.variant(resize:"80x80").processed, class: "profile-image" %>
 						<% else %>
-							<%= image_tag("no_image.jpg", size: "80x80", class: "profile-image") %>
+							<%= image_tag("/images/no_image.jpg", size: "80x80", class: "profile-image") %>
 						<% end %>
 					</td>
 					<td>
