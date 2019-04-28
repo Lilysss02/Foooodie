@@ -43,7 +43,7 @@
                 <% if current_user.image.attached? %>
                   <%= image_tag @user.image.variant(resize:"30x30").processed, class: "top-profile-image" %>
                 <% else %>
-                  <%= image_tag("/images/no_image.jpg", size: "30x30", class: "top-profile-image") %>
+                  <%= image_tag("no_image.jpg", size: "30x30", class: "top-profile-image") %>
                 <% end %>
                 <%= current_user.user_name %>
               </li>
