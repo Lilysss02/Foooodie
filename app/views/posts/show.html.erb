@@ -26,7 +26,7 @@
 					</div>
 				<% end %>
 			<% else %>
-				<%= image_tag("noimage.gif") %>
+				<%= image_tag("/images/noimage.gif") %>
 				</div>
 			<% end %>
 		</div>
@@ -146,9 +146,9 @@
 	  		half     : true,
 		    size     : 36,
 		    readOnly : true,
-		    starHalf : '/assets/star-half.png',
-		    starOff  : '/assets/star-off.png',
-		    starOn   : '/assets/star-on.png',
+		    starHalf : '/images/star-half.png',
+		    starOff  : '/images/star-off.png',
+		    starOn   : '/images/star-on.png',
 		    score : '<%= @post.review %>'
     	});
 	});
