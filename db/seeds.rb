@@ -5,3 +5,8 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+require "csv"
+
+CSV.foreach('db/prices.csv') do |info|
+  Price.create(:price_range => info[0])
+end
