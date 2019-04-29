@@ -1,24 +1,29 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# Foooodie
+食通な人向けの食べ歩きレポート投稿サイト。
 
-Things you may want to cover:
+「foodie」・・・食通、食べることが好き
 
-* Ruby version
+# 機能
+・ユーザ登録機能（gem 'devise'）
 
-* System dependencies
+・フリーワード検索機能(gem 'ransack')
 
-* Configuration
+・レポート投稿・編集・削除・下書き保存機能
 
-* Database creation
+・画像の複数投稿（Active Storage)
 
-* Database initialization
+・評価機能（jQuery Raty)
 
-* How to run the test suite
+・投稿のタグ付け機能
 
-* Services (job queues, cache servers, search engines, etc.)
+・投稿のお気に入り登録機能(ajax)
 
-* Deployment instructions
+・店舗の地図表示（Maps Embed API）
 
-* ...
+・店舗の検索・オートコンプリート（Maps JavaScript API、Places API)
+
+・ユーザのフォロー機能
+
+・スライドショー(slick.js)
