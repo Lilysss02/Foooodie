@@ -1,4 +1,6 @@
 class PostsController < ApplicationController
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
+  before_action :ensure_correct_user, only: [:edit, :update, :destroy]
   before_action :set_post, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -38,9 +40,9 @@ class PostsController < ApplicationController
     @post.images.detach
     # ActiveStorage::Attachmentのidを取得してPostモデルとBlobモデルのつながりを削除
     # if params[:post][:images].each do |image_id|
-    #   image = @post.images.find(image_id)
-    #   image.purge
-    # end
+    #     image = @post.images.find(image_id)
+    #     image.purge
+    #   end
     # end
 
     if @post.update(post_params)
@@ -65,7 +67,15 @@ class PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:title, :body, :used_at, :review, :shop_name, :shop_address, :shop_map, :latitude, :longitude, :price_id, :url, :status, :user_id, images: [])
+    params.require(:post).permit(:title, :body, :used_at, :review, :shop_name, :shop_address,
+      :shop_map, :latitude, :longitude, :price_id, :url, :status, :user_id, images: [])
+  end
+
+  def ensure_correct_user
+    post = Post.find_by(id: params[:id])
+    if post.user_id != current_user.id
+      redirect_to root_path
+    end
   end
 
 end

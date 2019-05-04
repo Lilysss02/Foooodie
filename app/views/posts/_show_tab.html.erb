@@ -203,7 +203,7 @@
 
 <script>
 	$(".tab1_label").on("click",function(){
-		var $th = $(this).index();
+		let $th = $(this).index();
 		$(this).addClass("active");
 		$(".tab2_label").removeClass("active");
 		$(".tab_panel").removeClass("active");
@@ -211,7 +211,7 @@
 	});
 
 	$(".tab2_label").on("click",function(){
-		var $th = $(this).index();
+		let $th = $(this).index();
 		$(this).addClass("active");
 		$(".tab1_label").removeClass("active");
 		$(".tab_panel").removeClass("active");

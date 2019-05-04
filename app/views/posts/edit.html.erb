@@ -7,9 +7,10 @@
       <div class="images-field clearfix">
         <%= form_with model: @post, local: true  do |f| %>
           <div class="form_area">
-
+            <label>現在登録されている画像（削除するものはチェックしてください）</label><br>
             <% if @post.images.attached? %>
               <% @post.images.each do |image| %>
+              <%= f.check_box :images, {:multiple => true}, image.id, false %><br>
                 <%= image_tag image, class: "edit_img" %>
               <% end %>
             <% end %>
@@ -70,30 +71,30 @@
 </div>
 
 <script>
-    $('#star').raty({
-        half     : true,
-        size     : 36,
-        starHalf : '/images/star-half.png',
-        starOff  : '/images/star-off.png',
-        starOn   : '/images/star-on.png',
-        target   : '#hint',
-        targetType : 'number',
-        targetKeep : true,
-        click: function(score) {
-          $('#review').val(score);
-        }
-    });
+  $('#star').raty({
+      half     : true,
+      size     : 36,
+      starHalf : '/images/star-half.png',
+      starOff  : '/images/star-off.png',
+      starOn   : '/images/star-on.png',
+      target   : '#hint',
+      targetType : 'number',
+      targetKeep : true,
+      click: function(score) {
+        $('#review').val(score);
+      }
+  });
 
 /////////////////////////// 画像プレビュー ///////////////////////////
   document.getElementById('imgInp').onchange = function(event) {
     initializeFiles();
 
-    var files = event.target.files;
+    let files = event.target.files;
 
-    for (var i = 0, f; f = files[i]; i++) {
-      var reader = new FileReader();
-      // var size = f.size;
-      // var limit = 50000;
+    for (let i = 0, f; f = files[i]; i++) {
+      let reader = new FileReader();
+      // let size = f.size;
+      // let limit = 50000;
 
       // if ( limit < size ) {
       //     alert('500KBを超えています。500KB以下のファイルを選択してください。');
@@ -105,7 +106,7 @@
 
       reader.onload = (function(theFile) {
         return function(e) {
-          var div = document.createElement('div');
+          let div = document.createElement('div');
           div.className = 'reader_file';
           div.innerHTML = '<div class="reader_title">' + encodeURIComponent(theFile.name) + '</div>';
           div.innerHTML += '<img class="reader_image" src="' + e.target.result + '" />';
@@ -120,105 +121,105 @@
   }
 
 /////////////////////////// Google Map ///////////////////////////
-var map;
+  let map;
 
-function init() {
-  // Google Mapで利用する初期設定用の変数
-  var latitude = document.getElementById('latitude').value;
-  var longitude = document.getElementById('longitude').value;
-  var latlng = new google.maps.LatLng(latitude, longitude);
-  var opts = {
-    zoom: 13,
-    mapTypeId: google.maps.MapTypeId.ROADMAP,
-    center: latlng
-  };
+  function init() {
+    // Google Mapで利用する初期設定用の変数
+    let latitude = document.getElementById('latitude').value;
+    let longitude = document.getElementById('longitude').value;
+    let latlng = new google.maps.LatLng(latitude, longitude);
+    let opts = {
+      zoom: 13,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      center: latlng
+    };
 
-  // getElementById("map")の"map"は、body内の<div id="map">より
-  map = new google.maps.Map(document.getElementById("map"), opts);
+    // getElementById("map")の"map"は、body内の<div id="map">より
+    map = new google.maps.Map(document.getElementById("map"), opts);
 
-  var card = document.getElementById('pac-card');
-  var input = document.getElementById('pac-input');
+    let card = document.getElementById('pac-card');
+    let input = document.getElementById('pac-input');
 
-  map.controls[google.maps.ControlPosition.TOP_RIGHT].push(card);
+    map.controls[google.maps.ControlPosition.TOP_RIGHT].push(card);
 
-  var autocomplete = new google.maps.places.Autocomplete(input);
+    let autocomplete = new google.maps.places.Autocomplete(input);
 
-  // 範囲を地図のビューポートに設定
-  autocomplete.bindTo('bounds', map);
-  // 検索範囲を制限
-  autocomplete.setOptions({strictBounds: true})
+    // 範囲を地図のビューポートに設定
+    autocomplete.bindTo('bounds', map);
+    // 検索範囲を制限
+    autocomplete.setOptions({strictBounds: true})
 
-  autocomplete.setFields(
-      ['formatted_address', 'place_id', 'geometry', 'icon', 'name', 'website']);
-
-
-  // Markerの初期設定
-  var markerOpts = {
-    position: new google.maps.LatLng(latitude, longitude),
-    map: map,
-    title: "marker"
-  };
-  // 直前で作成したMarkerOptionsを利用してMarkerを作成
-  var marker = new google.maps.Marker(markerOpts);
-
-  // 情報ウィンドウ
-  var infowindow = new google.maps.InfoWindow();
-  var infowindowContent = document.getElementById('infowindow-content');
-  // var placeIcon = document.getElementById('place-icon');
-  var placeName = document.getElementById('shop_name').value;
-  var placeAddress = document.getElementById('shop_address').value;
-  // 情報ウィンドウの内容をセットする
-  infowindow.setContent(infowindowContent);
-  infowindowContent.children['place-name'].textContent = placeName;
-  infowindowContent.children['place-address'].innerHTML = placeAddress;
-  infowindow.open(map, marker);
+    autocomplete.setFields(
+        ['formatted_address', 'place_id', 'geometry', 'icon', 'name', 'website']);
 
 
+    // Markerの初期設定
+    let markerOpts = {
+      position: new google.maps.LatLng(latitude, longitude),
+      map: map,
+      title: "marker"
+    };
+    // 直前で作成したMarkerOptionsを利用してMarkerを作成
+    let marker = new google.maps.Marker(markerOpts);
 
-  // 情報ウィンドウ
-  var infowindow = new google.maps.InfoWindow();
-  var infowindowContent = document.getElementById('infowindow-content');
-  // 情報ウィンドウの内容をセットする
-  infowindow.setContent(infowindowContent);
-  var marker = new google.maps.Marker({
-    map: map,
-    anchorPoint: new google.maps.Point(0, -29)
-  });
-
-  autocomplete.addListener('place_changed', function() {
-    infowindow.close();
-    marker.setVisible(false);
-    var place = autocomplete.getPlace();
-
-    if (!place.geometry) {
-      window.alert("No details available for input: '" + place.name + "'");
-      return;
-    }
-
-    if (place.geometry.viewport) {
-      map.fitBounds(place.geometry.viewport);
-    } else {
-      map.setCenter(place.geometry.location);
-      map.setZoom(17);
-    }
-    marker.setPosition(place.geometry.location);
-    marker.setVisible(true);
-
-    infowindowContent.children['place-icon'].src = place.icon;
-    infowindowContent.children['place-name'].textContent = place.name;
-    infowindowContent.children['place-address'].textContent = place.formatted_address.replace(/日本、/g , "" );
-
-    $('#shop_name').val(place.name);
-    $('#shop_address').val(place.formatted_address.replace(/日本、/g , "" ));
-    $('#shop_url').val(place.website);
-    $('#shop_map').val(place.place_id);
-    $('#latitude').val(place.geometry.location.lat());
-    $('#longitude').val(place.geometry.location.lng());
+    // 情報ウィンドウ
+    let infowindow = new google.maps.InfoWindow();
+    let infowindowContent = document.getElementById('infowindow-content');
+    // let placeIcon = document.getElementById('place-icon');
+    let placeName = document.getElementById('shop_name').value;
+    let placeAddress = document.getElementById('shop_address').value;
+    // 情報ウィンドウの内容をセットする
+    infowindow.setContent(infowindowContent);
+    infowindowContent.children['place-name'].textContent = placeName;
+    infowindowContent.children['place-address'].innerHTML = placeAddress;
     infowindow.open(map, marker);
-  });
-}
-$(document).on('turbolinks:load');
-init();
+
+
+
+    // 情報ウィンドウ
+    let infowindow = new google.maps.InfoWindow();
+    let infowindowContent = document.getElementById('infowindow-content');
+    // 情報ウィンドウの内容をセットする
+    infowindow.setContent(infowindowContent);
+    let marker = new google.maps.Marker({
+      map: map,
+      anchorPoint: new google.maps.Point(0, -29)
+    });
+
+    autocomplete.addListener('place_changed', function() {
+      infowindow.close();
+      marker.setVisible(false);
+      let place = autocomplete.getPlace();
+
+      if (!place.geometry) {
+        window.alert("No details available for input: '" + place.name + "'");
+        return;
+      }
+
+      if (place.geometry.viewport) {
+        map.fitBounds(place.geometry.viewport);
+      } else {
+        map.setCenter(place.geometry.location);
+        map.setZoom(17);
+      }
+      marker.setPosition(place.geometry.location);
+      marker.setVisible(true);
+
+      infowindowContent.children['place-icon'].src = place.icon;
+      infowindowContent.children['place-name'].textContent = place.name;
+      infowindowContent.children['place-address'].textContent = place.formatted_address.replace(/日本、/g , "" );
+
+      $('#shop_name').val(place.name);
+      $('#shop_address').val(place.formatted_address.replace(/日本、/g , "" ));
+      $('#shop_url').val(place.website);
+      $('#shop_map').val(place.place_id);
+      $('#latitude').val(place.geometry.location.lat());
+      $('#longitude').val(place.geometry.location.lng());
+      infowindow.open(map, marker);
+    });
+  }
+  $(document).on('turbolinks:load');
+  init();
 </script>
 
 <style>

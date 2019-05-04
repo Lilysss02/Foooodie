@@ -36,7 +36,7 @@
 	document.getElementById('imgInp').onchange = function(event) {
 	    initializeFiles();
 
-	    var file = event.target.files[0],
+	    let file = event.target.files[0],
 	    	reader = new FileReader();
 	        reader.readAsDataURL(file);
 

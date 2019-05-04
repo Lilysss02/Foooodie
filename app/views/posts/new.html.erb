@@ -33,7 +33,8 @@
             <label>タイトル</label>
             <%= f.text_field :title %><br>
             <label>本文</label>
-            <%= f.text_area :body %><br>
+            <%= f.text_area :body, id: "memo_text", cols: "25", rows: "5" %>
+            残<span class="count"></span><br>
             <label id="used_at_label">利用日</label>
             <%= f.date_field :used_at, id: "used_at" %><br>
             <label>店名</label>
@@ -80,6 +81,7 @@
 
 
 <script>
+////////////// レビュー ///////////////
   $('#star').raty({
     half     : true,
     size     : 36,
@@ -94,16 +96,40 @@
     }
   });
 
+
+$(function(){
+
+    let text_max = 500; // 最大入力値
+    $(".count").text(text_max - $("#memo_text").val().length);
+
+    $("#memo_text").on("keydown keyup keypress change",function(){
+        let text_length = $(this).val().length;
+        let countdown = text_max - text_length;
+        $(".count").text(countdown);
+        // CSSは任意で
+        if(countdown < 0){
+            $('.count').css({
+                color:'#ff0000',
+                fontWeight:'bold'
+            });
+        } else {
+            $('.count').css({
+                color:'#000000',
+                fontWeight:'normal'
+            });
+        }
+    });
+});
 /////////////////////////// 画像プレビュー ///////////////////////////
   document.getElementById('imgInp').onchange = function(event) {
     initializeFiles();
 
-    var files = event.target.files;
+    let files = event.target.files;
 
-    for (var i = 0, f; f = files[i]; i++) {
-      var reader = new FileReader();
-      // var size = f.size;
-      // var limit = 50000;
+    for (let i = 0, f; f = files[i]; i++) {
+      let reader = new FileReader();
+      // let size = f.size;
+      // let limit = 50000;
 
       // if ( limit < size ) {
       //     alert('500KBを超えています。500KB以下のファイルを選択してください。');
@@ -115,7 +141,7 @@
 
       reader.onload = (function(theFile) {
         return function(e) {
-          var div = document.createElement('div');
+          let div = document.createElement('div');
           div.className = 'reader_file';
           div.innerHTML = '<div class="reader_title">' + encodeURIComponent(theFile.name) + '</div>';
           div.innerHTML += '<img class="reader_image" src="' + e.target.result + '" />';
@@ -132,16 +158,16 @@
 /////////////////////////// Google Map ///////////////////////////
 
   function init() {
-    var map = new google.maps.Map(document.getElementById('map'), {
+    let map = new google.maps.Map(document.getElementById('map'), {
       center: {lat: 35.658191, lng: 139.701677},
       zoom: 13
     });
-    var card = document.getElementById('pac-card');
-    var input = document.getElementById('pac-input');
+    let card = document.getElementById('pac-card');
+    let input = document.getElementById('pac-input');
 
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(card);
 
-    var autocomplete = new google.maps.places.Autocomplete(input);
+    let autocomplete = new google.maps.places.Autocomplete(input);
 
     // 範囲を地図のビューポートに設定
     autocomplete.bindTo('bounds', map);
@@ -152,11 +178,11 @@
         ['formatted_address', 'place_id', 'geometry', 'icon', 'name', 'website']);
 
     // 情報ウィンドウ
-    var infowindow = new google.maps.InfoWindow();
-    var infowindowContent = document.getElementById('infowindow-content');
+    let infowindow = new google.maps.InfoWindow();
+    let infowindowContent = document.getElementById('infowindow-content');
     // 情報ウィンドウの内容をセットする
     infowindow.setContent(infowindowContent);
-    var marker = new google.maps.Marker({
+    let marker = new google.maps.Marker({
       map: map,
       anchorPoint: new google.maps.Point(0, -29)
     });
@@ -164,7 +190,7 @@
     autocomplete.addListener('place_changed', function() {
       infowindow.close();
       marker.setVisible(false);
-      var place = autocomplete.getPlace();
+      let place = autocomplete.getPlace();
 
       if (!place.geometry) {
         window.alert("No details available for input: '" + place.name + "'");

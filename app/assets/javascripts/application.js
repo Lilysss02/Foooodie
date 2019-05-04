@@ -18,6 +18,10 @@
 //= require bootstrap-sprockets
 //= require_directory .
 //= requre_tree .
+
+
+
+
 /*!
  * jQuery Raty - A Star Rating Plugin
  *
