@@ -32,7 +32,7 @@
  * version: 2.9.0
  *
  */
-
+// jquery.raty.jsの読み込みができないため以下に記述
 (function($) {
   'use strict';
 

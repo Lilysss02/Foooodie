@@ -17,6 +17,7 @@
  	@import "bootstrap-sprockets";
  	@import "bootstrap";
 
+
 * {
   margin: 0;
   padding: 0;
@@ -44,6 +45,14 @@ body {
   left: 0;
   z-index: 10;
   width: 100%;
+}
+.nav-icon {
+  -webkit-transition: all .3s;
+  transition: all .3s;
+}
+.nav-icon:hover {
+  -webkit-transform: translateY(-5px);
+  transform: translateY(-5px);
 }
 // 検索ボックス
 dl.searchbox{

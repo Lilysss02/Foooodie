@@ -1,76 +1,45 @@
 <div class="container">
   <div class="row">
-    <div class="col-md-offset-3 col-md-6">
+    <div class="col-md-offset-2 col-md-8">
       <h2>投稿編集ページ</h2>
       <br>
       <br>
-      <div class="images-field clearfix">
+      <div class="images-field">
         <%= form_with model: @post, local: true  do |f| %>
-          <div class="form_area">
-            <label>現在登録されている画像（削除するものはチェックしてください）</label><br>
-            <% if @post.images.attached? %>
-              <% @post.images.each do |image| %>
-              <%= f.check_box :images, {:multiple => true}, image.id, false %><br>
-                <%= image_tag image, class: "edit_img" %>
+          <% if @post.errors.any? %>
+            <h4><%= pluralize(@post.errors.count, "") %> 件のエラーにより投稿できません</h4>
+            <ul>
+              <% @post.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
               <% end %>
+            </ul>
+          <% end %>
+
+
+          <% if @post.images.attached? %>
+            <p>現在の投稿画像</p>
+            <% @post.images.each do |image| %>
+              <%= image_tag image, class: "edit_img" %>
             <% end %>
-            <br><br>
-            <%= f.file_field :images, multiple: true, id: :imgInp %>
-            <output id="list"></output>
-            <br>
+          <% end %>
+          <br><br>
 
-            <div id="star"></div><div id="hint" hidden></div>
-            <%= f.hidden_field :review, id: "review" %>
+        <%= render partial: 'form', locals: { f: f } %>
 
-            <label>タイトル</label>
-            <%= f.text_field :title %><br>
-            <label>本文</label>
-            <%= f.text_area :body %><br>
-            <label id="used_at_label">利用日</label>
-            <%= f.date_field :used_at, id: "used_at" %><br>
-            <label>店名</label>
-            <%= f.text_field :shop_name, id: "shop_name" %><br>
-            <label>住所</label>
-            <%= f.text_field :shop_address, id: "shop_address" %><br>
-            <label>URL</label>
-            <%= f.text_field :url, id: "shop_url" %><br>
-            <label>価格帯</label>
-            <%= f.collection_select :price_id, Price.all, :id, :price_range %><br>
 
-            <%= f.check_box :status, {}, :draft, :published %>
-            <label>下書きに保存</label>
-
-            <!-- place_idの保存 -->
-            <%= f.hidden_field :shop_map, id: "shop_map" %>
-            <!-- 緯度(latitude)の保存 -->
-            <%= f.hidden_field :latitude, id: "latitude" %>
-            <!-- 経度(longitude)の保存 -->
-            <%= f.hidden_field :longitude, id: "longitude" %>
-
-            <div class="pac-card" id="pac-card">
-                <input id="pac-input" type="text" placeholder="Enter a location">
-            </div>
-
-            <!-- GoogleMap情報 -->
-            <div id="map"></div>
-
-            <div id="infowindow-content">
-              <img src="" width="16" height="16" id="place-icon">
-              <span id="place-name"  class="title"></span><br>
-              <span id="place-address"></span>
-            </div>
-            <br>
-            <%= f.submit "更新", class: "btn btn-red btn-sm" %><br>
-            <%= link_to "Back", post_path(@post) %>
-          </div>
-          <br>
+        <br>
+        <%= f.submit "更新", class: "btn btn-red btn-sm" %><br>
+        <%= link_to "Back", post_path(@post) %>
+        <br>
         <% end %>
       </div>
     </div>
   </div>
 </div>
 
+
 <script>
+/////////////////////////// レビュー ///////////////////////////
   $('#star').raty({
       half     : true,
       size     : 36,
@@ -84,7 +53,29 @@
         $('#review').val(score);
       }
   });
+/////////////////////////// 文字数カウント ///////////////////////////
+  $(function(){
+    let text_max = 1000;
+    $(".count").text(text_max - $("#memo_text").val().length);
 
+    $("#memo_text").on("keydown keyup keypress change",function(){
+      let text_length = $(this).val().length;
+      let countdown = text_max - text_length;
+      $(".count").text(countdown);
+
+      if(countdown < 0){
+        $('.count').css({
+          color:'#ff0000',
+          fontWeight:'bold'
+        });
+      } else {
+        $('.count').css({
+          color:'#000000',
+          fontWeight:'normal'
+        });
+      }
+    });
+  });
 /////////////////////////// 画像プレビュー ///////////////////////////
   document.getElementById('imgInp').onchange = function(event) {
     initializeFiles();
@@ -93,14 +84,6 @@
 
     for (let i = 0, f; f = files[i]; i++) {
       let reader = new FileReader();
-      // let size = f.size;
-      // let limit = 50000;
-
-      // if ( limit < size ) {
-      //     alert('500KBを超えています。500KB以下のファイルを選択してください。');
-      //     f.value = '';
-      //     return;
-      // }
 
       reader.readAsDataURL(f);
 
@@ -121,21 +104,51 @@
   }
 
 /////////////////////////// Google Map ///////////////////////////
-  let map;
 
   function init() {
     // Google Mapで利用する初期設定用の変数
     let latitude = document.getElementById('latitude').value;
     let longitude = document.getElementById('longitude').value;
-    let latlng = new google.maps.LatLng(latitude, longitude);
-    let opts = {
-      zoom: 13,
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
-      center: latlng
-    };
+    let map;
 
-    // getElementById("map")の"map"は、body内の<div id="map">より
-    map = new google.maps.Map(document.getElementById("map"), opts);
+
+    if (latitude == "") {
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 35.658191, lng: 139.701677},
+        zoom: 13
+      });
+
+    } else {
+
+      let latlng = new google.maps.LatLng(latitude, longitude);
+      let opts = {
+        zoom: 13,
+        center: latlng
+      };
+      // 'map'は、body内の<div id="map">より
+      map = new google.maps.Map(document.getElementById('map'), opts);
+
+      // Markerの初期設定
+      let markerOpts = {
+        position: new google.maps.LatLng(latitude, longitude),
+        map: map,
+        title: "marker"
+      };
+      // 直前で作成したMarkerOptionsを利用してMarkerを作成
+      let marker = new google.maps.Marker(markerOpts);
+
+      // 情報ウィンドウ
+      let infowindow = new google.maps.InfoWindow();
+      let infowindowContent = document.getElementById('infowindow-content');
+      // let placeIcon = document.getElementById('place-icon');
+      let placeName = document.getElementById('shop_name').value;
+      let placeAddress = document.getElementById('shop_address').value;
+      // 情報ウィンドウの内容をセットする
+      infowindow.setContent(infowindowContent);
+      infowindowContent.children['place-name'].textContent = placeName;
+      infowindowContent.children['place-address'].innerHTML = placeAddress;
+      infowindow.open(map, marker);
+    }
 
     let card = document.getElementById('pac-card');
     let input = document.getElementById('pac-input');
@@ -147,20 +160,11 @@
     // 範囲を地図のビューポートに設定
     autocomplete.bindTo('bounds', map);
     // 検索範囲を制限
-    autocomplete.setOptions({strictBounds: true})
+    // autocomplete.setOptions({strictBounds: true})
 
     autocomplete.setFields(
         ['formatted_address', 'place_id', 'geometry', 'icon', 'name', 'website']);
 
-
-    // Markerの初期設定
-    let markerOpts = {
-      position: new google.maps.LatLng(latitude, longitude),
-      map: map,
-      title: "marker"
-    };
-    // 直前で作成したMarkerOptionsを利用してMarkerを作成
-    let marker = new google.maps.Marker(markerOpts);
 
     // 情報ウィンドウ
     let infowindow = new google.maps.InfoWindow();
@@ -168,17 +172,10 @@
     // let placeIcon = document.getElementById('place-icon');
     let placeName = document.getElementById('shop_name').value;
     let placeAddress = document.getElementById('shop_address').value;
-    // 情報ウィンドウの内容をセットする
-    infowindow.setContent(infowindowContent);
-    infowindowContent.children['place-name'].textContent = placeName;
-    infowindowContent.children['place-address'].innerHTML = placeAddress;
-    infowindow.open(map, marker);
 
-
-
-    // 情報ウィンドウ
-    let infowindow = new google.maps.InfoWindow();
-    let infowindowContent = document.getElementById('infowindow-content');
+    // 情報ウィンドウ再代入
+    infowindow = new google.maps.InfoWindow();
+    infowindowContent = document.getElementById('infowindow-content');
     // 情報ウィンドウの内容をセットする
     infowindow.setContent(infowindowContent);
     let marker = new google.maps.Marker({
@@ -224,16 +221,29 @@
 
 <style>
   .edit_img {
-    height: 200px;
+    height: 150px;
+    margin-right: 10px;
+  }
+
+  .reader_file {
+    float: left;
   }
   .reader_image {
-    width: 300px;
-    height: 300px;
+    height: 150px;
+    margin-right: 10px;
+  }
+
+  .form-control {
+    width: 250px;
   }
 
   .form_area {
     float: left;
-    margin-right: 50px;
+    margin-right: 40px;
+  }
+
+  .star_area {
+    clear: both;
   }
 
   #map {
@@ -242,7 +252,6 @@
   }
 
   #description {
-    font-family: Roboto;
     font-size: 15px;
     font-weight: 300;
   }
@@ -267,7 +276,6 @@
     outline: none;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
     background-color: #fff;
-    font-family: Roboto;
   }
 
   #pac-container {
@@ -281,14 +289,12 @@
   }
 
   .pac-controls label {
-    font-family: Roboto;
     font-size: 13px;
     font-weight: 300;
   }
 
   #pac-input {
     background-color: #fff;
-    font-family: Roboto;
     font-size: 15px;
     font-weight: 300;
     margin-left: 12px;

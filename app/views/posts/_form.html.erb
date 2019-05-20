@@ -1,0 +1,61 @@
+<div class="images_area crearfix">
+	<label>レポート写真</label>
+	<%= f.file_field :images, multiple: true, id: :imgInp %>
+	<output id="list"></output>
+</div>
+
+<div class="star_area">
+	<div id="star"></div>
+	<div id="hint" hidden></div>
+	<%= f.hidden_field :review, id: "review" %>
+	<br>
+</div>
+
+<div class="form_area">
+	<label>タイトル</label>
+	<%= f.text_field :title, class: "form-control" %><br>
+	<label>本文</label>
+	<%= f.text_area :body, id: "memo_text", cols: "25", rows: "5", class: "form-control" %>
+	残<span class="count"></span><br>
+	<label id="used_at_label">利用日</label>
+	<%= f.date_field :used_at, id: "used_at", class: "form-control" %><br>
+</div>
+
+<div class="form_area">
+	<label>店名</label>
+	<%= f.text_field :shop_name, id: "shop_name", class: "form-control" %><br>
+	<label>住所</label>
+	<%= f.text_field :shop_address, id: "shop_address", class: "form-control" %><br>
+	<label>URL</label>
+	<%= f.text_field :url, id: "shop_url", class: "form-control" %><br>
+	<label>価格帯</label>
+	<%= f.collection_select :price_id, Price.all, :id, :price_range %><br>
+	<%= f.check_box :status, {}, :draft, :published %>
+	<label>下書きに保存</label>
+
+	<!-- place_idの保存 -->
+	<%= f.hidden_field :shop_map, id: "shop_map" %>
+	<!-- 緯度(latitude)の保存 -->
+	<%= f.hidden_field :latitude, id: "latitude" %>
+	<!-- 経度(longitude)の保存 -->
+	<%= f.hidden_field :longitude, id: "longitude" %>
+</div>
+
+<br>
+
+<div class="form_area">
+	<p>*マップでお店情報を検索すると、店名、住所に自動入力されます。</p>
+</div>
+
+<div class="pac-card" id="pac-card">
+	<input id="pac-input" type="text" placeholder="Enter a location">
+</div>
+
+<!-- GoogleMap情報 -->
+<div id="map"></div>
+
+<div id="infowindow-content">
+	<img src="" width="16" height="16" id="place-icon">
+	<span id="place-name"  class="title"></span><br>
+	<span id="place-address"></span>
+</div>

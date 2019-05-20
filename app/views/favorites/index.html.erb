@@ -8,87 +8,92 @@
 		<% end %>
 
 		<div class="layout">
-		<% @favorites.each do |favorite| %>
-			<div class="image">
-				<% if favorite.post.images.attached? %>
-					<%= link_to post_path(favorite.post.id) do %>
-						<%= image_tag favorite.post.images[0] %> <br>
+			<% @favorites.each do |favorite| %>
+				<div class="image">
+					<% if favorite.post.images.attached? %>
+						<%= image_tag favorite.post.images[0] %>
 					<% end %>
-				<% end %>
-				<%= link_to favorites_delete_path(favorite.post.id), method: :delete, data: { confirm: '削除しますか？' } , class: "btn btn-default btn-xs" do %>
-					<i class="glyphicon glyphicon-trash" aria-hidden="true"></i>
-				<% end %>
-				<br>
-			</div>
-		<% end %>
+					<div class="mask">
+						<%= link_to post_path(favorite.post.id), class: "title" do %>
+							<div class="caption">
+								<%= favorite.post.title %>
+							</div>
+						<% end %>
+					</div><br>
+					<%= link_to favorites_delete_path(favorite.post.id), method: :delete, data: { confirm: '削除しますか？' } , class: "btn btn-default btn-xs" do %>
+						<i class="glyphicon glyphicon-trash" aria-hidden="true"></i>
+					<% end %>
+					<br>
+				</div>
+			<% end %>
 		</div>
 	</div>
 </div>
 
 <style>
 	.ribbon {
-	  display: inline-block;
-	  position: relative;
-	  height: 60px;
-	  line-height: 60px;
-	  text-align: center;
-	  padding: 7px 0;
-	  font-size: 18px;
-	  background: #acd879;
-	  color: #FFF;
-	  box-sizing: border-box;
-	  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
-	  margin-top: 20px;
-	  width: 300px;
+		display: inline-block;
+		position: relative;
+		height: 60px;
+		line-height: 60px;
+		text-align: center;
+		padding: 7px 0;
+		font-size: 18px;
+		background: #acd879;
+		color: #FFF;
+		box-sizing: border-box;
+		box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
+		margin-top: 20px;
+		width: 300px;
 	}
 
 	.ribbon h3 {
-	  margin: 0;
-	  padding: 0 30px;
-	  border-top: dashed 2px rgba(255, 255, 255, 0.5);
-	  border-bottom: dashed 2px rgba(255, 255, 255, 0.5);
-	  line-height: 42px;
+		margin: 0;
+		padding: 0 30px;
+		border-top: dashed 2px rgba(255, 255, 255, 0.5);
+		border-bottom: dashed 2px rgba(255, 255, 255, 0.5);
+		line-height: 42px;
 	}
 
 	.ribbon:before, .ribbon:after {
-	  position: absolute;
-	  content: '';
-	  width: 0px;
-	  height: 0px;
-	  z-index: 1;
+		position: absolute;
+		content: '';
+		width: 0px;
+		height: 0px;
+		z-index: 1;
 	}
 
 	.ribbon:before {
-	  top: -2px;
-	  left: -2px;
-	  border-width: 32px 0px 32px 15px;
-	  border-color: transparent transparent transparent #fff;
-	  border-style: solid;
+		top: -2px;
+		left: -2px;
+		border-width: 32px 0px 32px 15px;
+		border-color: transparent transparent transparent #fff;
+		border-style: solid;
 	}
 
 	.ribbon:after {
-	  top: -2px;
-	  right: -2px;
-	  border-width: 32px 15px 32px 0px;
-	  border-color: transparent #fff transparent transparent;
-	  border-style: solid;
+		top: -2px;
+		right: -2px;
+		border-width: 32px 15px 32px 0px;
+		border-color: transparent #fff transparent transparent;
+		border-style: solid;
 	}
 
 	.image {
 		background-color: #fff;
-	    overflow: hidden;
-	    text-align: center;
-	    box-shadow: 3px 3px 6px #e6e6e6;
-	    cursor: default;
+		overflow: hidden;
+		text-align: center;
+		box-shadow: 3px 3px 6px #e6e6e6;
+		cursor: default;
 		transform : translate(0, 50px);
 		transition:all 0.5s;
 		position: relative;;
 	}
 	.layout {
 		display: grid;
-		gap: 5px;
-  		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  		grid-template-rows: 200px 200px 200px 200px 200px auto;
+		gap: 10px;
+	    grid-auto-rows: 200px;
+	    grid-template-columns: repeat(auto-fit, 200px);
 	}
 
 	.image.scrollin {
@@ -99,6 +104,28 @@
 		height: 100%;
 		width: 100%;
 		object-fit: contain;
+	}
+	.mask {
+		width: 200px;
+		height: 200px;
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		opacity: 0;
+		overflow: hidden;
+		background-color: rgba(0,0,0,0.3);
+		transition: all 0.7s ease;
+	}
+	.mask:hover {
+		opacity: 1;
+	}
+	.caption {
+		font-family: Georgia, serif;
+		font-style: italic;
+		font-size: 15px;
+		padding-top: 90px;
+		padding-bottom: 90px;
+		color: #fff;
 	}
 	.btn.btn-default {
 		font-size: 10px;

@@ -42,7 +42,7 @@
 
 	        reader.onload = (function(file) {
 	            return function(e) {
-	                var div = document.createElement('div');
+	                let div = document.createElement('div');
 	                div.className = 'reader_file';
 	                div.innerHTML += '<img class="reader_image" src="' + e.target.result + '" width="150px" />';
 	                document.getElementById('list').insertBefore(div, null);

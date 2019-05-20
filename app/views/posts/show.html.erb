@@ -55,15 +55,18 @@
 	<br>
 
 	<% if @post.user == current_user %>
-			<%= link_to "編集", edit_post_path(@post.id), class: "fas fa-edit" %> | <%= link_to "削除", post_path, method: :delete, "data-confirm" => "削除しますか？", class: "fas fa-trash-alt" %>
+			<%= link_to "編集", edit_post_path(@post.id), class: "fas fa-edit" %> | 
+			<%= link_to "削除", post_path, method: :delete, "data-confirm" => "削除しますか？", class: "fas fa-trash-alt" %>
 	<% end %>
 	</div>
 </div>
 <br>
-<div class="map">
-	<iframe width="600" height="450" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?key=<%= Rails.application.credentials.dig(:api_key, :google) %>&q=place_id:<%= @post.shop_map %>" allowfullscreen></iframe>
-</div>
 
+<div class="iframe">
+	<iframe width="600" height="450" frameborder="0" style="border:0"
+		src="https://www.google.com/maps/embed/v1/place?key=<%= Rails.application.credentials.dig(:api_key, :google) %>
+		&q=place_id:<%= @post.shop_map %>" allowfullscreen></iframe>
+</div>
 
 <style>
 	.row {
@@ -134,8 +137,8 @@
     .slide-dots .slick-active button:before {
         content: '●';
     }
-    .map {
-    	margin: 0 0 20px 350px;
+    .iframe {
+    	text-align: center;
     }
 </style>
 

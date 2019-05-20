@@ -15,18 +15,22 @@
 			<% end %>
 			<div class="layout">
 				<% @posts.published.each do |post| %>
-
-						<div class="image">
-							<% if post.images.attached? %>
-					    		<%= link_to post_path(post.id) do %>
-					    			<%= image_tag post.images[0]%>
-					    		<% end %>
+					<div class="image">
+						<% if post.images.attached? %>
+							<%= image_tag post.images[0] %>
+						<% end %>
+						<div class="mask">
+							<%= link_to post_path(post.id), class: "title" do %>
+								<div class="caption">
+									<%= post.title %>
+								</div>
 							<% end %>
+						</div><br>
 
-							<div id="favorites_buttons_<%= post.id %>">
-								<%= render partial: 'favorites/favorite_form', locals: { post: post, favorites: @favorites} %>
-							</div>
+						<div id="favorites_buttons_<%= post.id %>">
+							<%= render partial: 'favorites/favorite_form', locals: { post: post, favorites: @favorites} %>
 						</div>
+					</div>
 				<% end %>
 			</div>
 		</div>
@@ -39,21 +43,25 @@
 			<% end %>
 			<div class="layout">
 				<% @posts.draft.each do |post| %>
-
-						<div class="image">
-							<% if post.images.attached? %>
-				    			<%= link_to post_path(post.id) do %>
-				    				<%= image_tag post.images[0] %>
-				    			<% end %>
+					<div class="image">
+						<% if post.images.attached? %>
+							<%= image_tag post.images[0] %>
+						<% end %>
+						<div class="mask">
+							<%= link_to post_path(post.id), class: "title" do %>
+								<div class="caption">
+									<%= post.title %>
+								</div>
 							<% end %>
-						</div>
-
+						</div><br>
+					</div>
 				<% end %>
 			</div>
 		</div>
 
 	</div>
 </div>
+
 <section id="deleteArea" class="modalArea">
 	<div id="deleteBg" class="modalBg"></div>
 	<div class="modalWrapper">
@@ -93,7 +101,7 @@
 		gap: 10px;
 	    grid-auto-rows: 200px;
 	    grid-template-columns: repeat(auto-fit, 200px);
-	    justify-content: center;
+	    justify-content: center; /* グリッド全体を中央に寄せる設定 */
 	}
 
 	.image.scrollin {
@@ -104,6 +112,28 @@
 		height: 100%;
 		width: 100%;
 		object-fit: contain;
+	}
+	.mask {
+		width: 200px;
+		height: 200px;
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		opacity: 0;
+		overflow: hidden;
+		background-color: rgba(0,0,0,0.3);
+		transition:all 0.7s ease;
+	}
+	.mask:hover {
+		opacity: 1;
+	}
+	.caption {
+		font-family: Georgia, serif;
+		font-style: italic;
+		font-size: 15px;
+		padding-top: 90px;
+		padding-bottom: 90px;
+		color: #fff;
 	}
 
 	.tab_wrap {

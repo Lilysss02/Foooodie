@@ -25,12 +25,12 @@
             <div class="navbar-brand">Foooodie</div>
           </div>
           <ul class="nav navbar-nav">
-            <li><%= link_to "Home", root_path, class: "fa fa-home" %></li>
+            <li><%= link_to "Home", root_path, class: "fa fa-home nav-icon" %></li>
 
             <% if user_signed_in? %>
-              <li><%= link_to "MyPage", user_path(current_user), class: "fas fa-user" %></li>
-              <li><%= link_to "Favorites", favorites_index_path, class: "fas fa-heart" %></li>
-              <li><%= link_to "LogOut", destroy_user_session_path, method: :delete, class: "fas fa-sign-out-alt" %></li>
+              <li><%= link_to "MyPage", user_path(current_user), class: "fas fa-user nav-icon" %></li>
+              <li><%= link_to "Favorites", favorites_index_path, class: "fas fa-heart nav-icon" %></li>
+              <li><%= link_to "LogOut", destroy_user_session_path, method: :delete, class: "fas fa-sign-out-alt nav-icon" %></li>
               <li>
               <dl class="searchbox">
                 <%= search_form_for @search, url: root_path do |f| %>
@@ -50,8 +50,8 @@
 
             <% else %>
 
-              <li><%= link_to "LogIn", new_user_session_path, class: "fas fa-sign-in-alt" %></li>
-              <li><%= link_to "SignUp", new_user_registration_path, class: "fas fa-seedling" %></li>
+              <li><%= link_to "LogIn", new_user_session_path, class: "fas fa-sign-in-alt nav-icon" %></li>
+              <li><%= link_to "SignUp", new_user_registration_path, class: "fas fa-seedling nav-icon" %></li>
             <% end %>
           </ul>
         </div>

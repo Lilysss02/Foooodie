@@ -2,11 +2,13 @@ class Post < ApplicationRecord
   belongs_to :price
   belongs_to :user
   has_many :favorites, dependent: :destroy
-  # enum status: { published_: 0, draft: 1 }
-  enum status: %i(published draft)
   has_many_attached :images
-  validates :title, presence: :true, length: { maximum: 50 }
 
+  enum status: %i(published draft)
+
+  validates :title, presence: :true, length: { maximum: 50 }
+  validates :body, length: { maximum: 1000 }
+  validates :shop_map, presence: :true
   validate :images_type
 
   def favorited_by?(user)
@@ -40,9 +42,11 @@ class Post < ApplicationRecord
     if images.attached? == false
       errors.add(:images, "を選択してください")
     end
-    images.each do |image|
-      if !image.content_type.in?(%('image/jpeg image/png'))
-        errors.add(:images, 'needs to be a JPEG or PNG')
+
+    if images.each do |image|
+        if !image.content_type.in?(%('image/jpeg image/jpg image/gif image/png'))
+          errors.add(:images, 'ファイル形式はJPEG,JPG,GIF,PNGのみです')
+        end
       end
     end
   end

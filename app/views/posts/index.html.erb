@@ -10,9 +10,7 @@
 			<% @posts.published.each do |post| %>
 				<div class="image">
 					<% if post.images.attached? %>
-						<%= link_to post_path(post.id) do %>
-							<%= image_tag post.images[0] %>
-						<% end %>
+						<%= image_tag post.images[0] %>
 					<% end %>
 					<div class="mask">
 						<%= link_to post_path(post.id), class: "title" do %>
@@ -100,16 +98,15 @@
 		width: 100%;
 		object-fit: contain;
 	}
-
 	.mask {
-		width: 268px;
+		width: 200px;
 		height: 200px;
 		position: absolute;
 		top: 0px;
 		left: 0px;
-		opacity:		0;
+		opacity: 0;
 		overflow: hidden;
-		background-color:	rgba(0,0,0,0.3);
+		background-color: rgba(0,0,0,0.3);
 		transition:all 0.7s ease;
 	}
 	.mask:hover {

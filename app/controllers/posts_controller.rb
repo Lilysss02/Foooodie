@@ -37,7 +37,7 @@ class PostsController < ApplicationController
   end
 
   def update
-    @post.images.detach
+    # @post.images.detach
     # ActiveStorage::Attachmentのidを取得してPostモデルとBlobモデルのつながりを削除
     # if params[:post][:images].each do |image_id|
     #     image = @post.images.find(image_id)

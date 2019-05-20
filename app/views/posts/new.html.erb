@@ -8,7 +8,7 @@
       <h2>新規投稿</h2>
       <br>
       <br>
-      <div class="images-field clearfix">
+      <div class="images-field">
         <%= form_with model: @post, local: true  do |f| %>
           <% if @post.errors.any? %>
             <h4><%= pluralize(@post.errors.count, "") %> 件のエラーにより投稿できません</h4>
@@ -19,59 +19,10 @@
             </ul>
           <% end %>
 
+          <%= render partial: 'form', locals: { f: f } %>
 
-          <label>レポート写真</label>
-          <%= f.file_field :images, multiple: true, id: :imgInp %>
-          <output id="list"></output>
           <br>
-
-          <div class="form_area">
-            <div id="star"></div><div id="hint" hidden></div>
-            <%= f.hidden_field :review, id: "review" %>
-
-
-            <label>タイトル</label>
-            <%= f.text_field :title %><br>
-            <label>本文</label>
-            <%= f.text_area :body, id: "memo_text", cols: "25", rows: "5" %>
-            残<span class="count"></span><br>
-            <label id="used_at_label">利用日</label>
-            <%= f.date_field :used_at, id: "used_at" %><br>
-            <label>店名</label>
-            <%= f.text_field :shop_name, id: "shop_name" %><br>
-            <label>住所</label>
-            <%= f.text_field :shop_address, id: "shop_address" %><br>
-            <label>URL</label>
-            <%= f.text_field :url, id: "shop_url" %><br>
-            <label>価格帯</label>
-            <%= f.collection_select :price_id, Price.all, :id, :price_range %><br>
-
-            <%= f.check_box :status, {}, :draft, :published %>
-            <label>下書きに保存</label>
-
-            <!-- place_idの保存 -->
-            <%= f.hidden_field :shop_map, id: "shop_map" %>
-            <!-- 緯度(latitude)の保存 -->
-            <%= f.hidden_field :latitude, id: "latitude" %>
-            <!-- 経度(longitude)の保存 -->
-            <%= f.hidden_field :longitude, id: "longitude" %>
-          </div>
-
-            <div class="pac-card" id="pac-card">
-                <input id="pac-input" type="text" placeholder="Enter a location">
-            </div>
-
-            <!-- GoogleMap情報 -->
-            <div id="map"></div>
-
-            <div id="infowindow-content">
-              <img src="" width="16" height="16" id="place-icon">
-              <span id="place-name"  class="title"></span><br>
-              <span id="place-address"></span>
-            </div>
-            <br>
-            <%= f.submit "投稿", class: "btn btn-orange btn-sm" %>
-          </div>
+          <%= f.submit "投稿", class: "btn btn-orange btn-sm" %>
           <br>
         <% end %>
       </div>
@@ -81,7 +32,7 @@
 
 
 <script>
-////////////// レビュー ///////////////
+/////////////////////////// レビュー ///////////////////////////
   $('#star').raty({
     half     : true,
     size     : 36,
@@ -96,30 +47,30 @@
     }
   });
 
-
-$(function(){
-
-    let text_max = 500; // 最大入力値
+/////////////////////////// 文字数カウント ///////////////////////////
+  $(function(){
+    let text_max = 1000;
     $(".count").text(text_max - $("#memo_text").val().length);
 
     $("#memo_text").on("keydown keyup keypress change",function(){
-        let text_length = $(this).val().length;
-        let countdown = text_max - text_length;
-        $(".count").text(countdown);
-        // CSSは任意で
-        if(countdown < 0){
-            $('.count').css({
-                color:'#ff0000',
-                fontWeight:'bold'
-            });
-        } else {
-            $('.count').css({
-                color:'#000000',
-                fontWeight:'normal'
-            });
-        }
+      let text_length = $(this).val().length;
+      let countdown = text_max - text_length;
+      $(".count").text(countdown);
+
+      if(countdown < 0){
+        $('.count').css({
+          color:'#ff0000',
+          fontWeight:'bold'
+        });
+      } else {
+        $('.count').css({
+          color:'#000000',
+          fontWeight:'normal'
+        });
+      }
     });
-});
+  });
+
 /////////////////////////// 画像プレビュー ///////////////////////////
   document.getElementById('imgInp').onchange = function(event) {
     initializeFiles();
@@ -128,14 +79,6 @@ $(function(){
 
     for (let i = 0, f; f = files[i]; i++) {
       let reader = new FileReader();
-      // let size = f.size;
-      // let limit = 50000;
-
-      // if ( limit < size ) {
-      //     alert('500KBを超えています。500KB以下のファイルを選択してください。');
-      //     f.value = '';
-      //     return;
-      // }
 
       reader.readAsDataURL(f);
 
@@ -156,7 +99,6 @@ $(function(){
   };
 
 /////////////////////////// Google Map ///////////////////////////
-
   function init() {
     let map = new google.maps.Map(document.getElementById('map'), {
       center: {lat: 35.658191, lng: 139.701677},
@@ -165,6 +107,7 @@ $(function(){
     let card = document.getElementById('pac-card');
     let input = document.getElementById('pac-input');
 
+    // 検索フォームを右上に配置
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(card);
 
     let autocomplete = new google.maps.places.Autocomplete(input);
@@ -172,7 +115,7 @@ $(function(){
     // 範囲を地図のビューポートに設定
     autocomplete.bindTo('bounds', map);
     // 検索範囲を制限
-    autocomplete.setOptions({strictBounds: true})
+    // autocomplete.setOptions({strictBounds: true})
 
     autocomplete.setFields(
         ['formatted_address', 'place_id', 'geometry', 'icon', 'name', 'website']);
@@ -224,23 +167,40 @@ $(function(){
 
 <style>
   .reader_file {
-    /*float: left;*/
+    float: left;
   }
+
   .reader_image {
-      width: 150px;
-      height: 150px;
+    height: 150px;
+    margin-right: 10px;
+  }
+
+  .form-control {
+    width: 250px;
+  }
+
+  .form_area {
+    float: left;
+    margin-right: 40px;
+  }
+
+  .star_area {
+    clear: both;
+  }
+
+  .map_comment {
+    width: 100%;
   }
 
   #map {
-      height: 400px;
-      width: 600px;
+    height: 400px;
+    width: 600px;
   }
 
   #description {
-      font-family: Roboto;
-      font-size: 15px;
-      font-weight: 300;
-    }
+    font-size: 15px;
+    font-weight: 300;
+  }
 
   #infowindow-content .title {
     font-weight: bold;
@@ -260,7 +220,6 @@ $(function(){
     outline: none;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
     background-color: #fff;
-    font-family: Roboto;
   }
 
   #pac-container {
@@ -274,21 +233,19 @@ $(function(){
   }
 
   .pac-controls label {
-    font-family: Roboto;
     font-size: 13px;
     font-weight: 300;
   }
 
   #pac-input {
-      background-color: #fff;
-      font-family: Roboto;
-      font-size: 15px;
-      font-weight: 300;
-      margin-left: 12px;
-      padding: 0 11px 0 13px;
-      text-overflow: ellipsis;
-      width: 400px;
-    }
+    background-color: #fff;
+    font-size: 15px;
+    font-weight: 300;
+    margin-left: 12px;
+    padding: 0 11px 0 13px;
+    text-overflow: ellipsis;
+    width: 400px;
+  }
 
   #pac-input:focus {
     border-color: #4d90fe;
