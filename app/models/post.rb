@@ -43,6 +43,10 @@ class Post < ApplicationRecord
       errors.add(:images, "を選択してください")
     end
 
+    if images.length > 10
+      errors.add(:images, "の投稿可能枚数は10枚までです")
+    end
+
     if images.each do |image|
         if !image.content_type.in?(%('image/jpeg image/jpg image/gif image/png'))
           errors.add(:images, 'ファイル形式はJPEG,JPG,GIF,PNGのみです')

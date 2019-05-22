@@ -15,7 +15,6 @@
             </ul>
           <% end %>
 
-
           <% if @post.images.attached? %>
             <p>現在の投稿画像</p>
             <% @post.images.each do |image| %>
@@ -25,7 +24,6 @@
           <br><br>
 
         <%= render partial: 'form', locals: { f: f } %>
-
 
         <br>
         <%= f.submit "更新", class: "btn btn-red btn-sm" %><br>
@@ -39,70 +37,6 @@
 
 
 <script>
-/////////////////////////// レビュー ///////////////////////////
-  $('#star').raty({
-      half     : true,
-      size     : 36,
-      starHalf : '/images/star-half.png',
-      starOff  : '/images/star-off.png',
-      starOn   : '/images/star-on.png',
-      target   : '#hint',
-      targetType : 'number',
-      targetKeep : true,
-      click: function(score) {
-        $('#review').val(score);
-      }
-  });
-/////////////////////////// 文字数カウント ///////////////////////////
-  $(function(){
-    let text_max = 1000;
-    $(".count").text(text_max - $("#memo_text").val().length);
-
-    $("#memo_text").on("keydown keyup keypress change",function(){
-      let text_length = $(this).val().length;
-      let countdown = text_max - text_length;
-      $(".count").text(countdown);
-
-      if(countdown < 0){
-        $('.count').css({
-          color:'#ff0000',
-          fontWeight:'bold'
-        });
-      } else {
-        $('.count').css({
-          color:'#000000',
-          fontWeight:'normal'
-        });
-      }
-    });
-  });
-/////////////////////////// 画像プレビュー ///////////////////////////
-  document.getElementById('imgInp').onchange = function(event) {
-    initializeFiles();
-
-    let files = event.target.files;
-
-    for (let i = 0, f; f = files[i]; i++) {
-      let reader = new FileReader();
-
-      reader.readAsDataURL(f);
-
-      reader.onload = (function(theFile) {
-        return function(e) {
-          let div = document.createElement('div');
-          div.className = 'reader_file';
-          div.innerHTML = '<div class="reader_title">' + encodeURIComponent(theFile.name) + '</div>';
-          div.innerHTML += '<img class="reader_image" src="' + e.target.result + '" />';
-          document.getElementById('list').insertBefore(div, null);
-        }
-      })(f);
-    }
-  };
-
-  function initializeFiles() {
-    document.getElementById('list').innerHTML = '';
-  }
-
 /////////////////////////// Google Map ///////////////////////////
 
   function init() {
@@ -159,8 +93,6 @@
 
     // 範囲を地図のビューポートに設定
     autocomplete.bindTo('bounds', map);
-    // 検索範囲を制限
-    // autocomplete.setOptions({strictBounds: true})
 
     autocomplete.setFields(
         ['formatted_address', 'place_id', 'geometry', 'icon', 'name', 'website']);
@@ -218,104 +150,3 @@
   $(document).on('turbolinks:load');
   init();
 </script>
-
-<style>
-  .edit_img {
-    height: 150px;
-    margin-right: 10px;
-  }
-
-  .reader_file {
-    float: left;
-  }
-  .reader_image {
-    height: 150px;
-    margin-right: 10px;
-  }
-
-  .form-control {
-    width: 250px;
-  }
-
-  .form_area {
-    float: left;
-    margin-right: 40px;
-  }
-
-  .star_area {
-    clear: both;
-  }
-
-  #map {
-    height: 400px;
-    width: 600px;
-  }
-
-  #description {
-    font-size: 15px;
-    font-weight: 300;
-  }
-
-  #infowindow-content .title {
-    font-weight: bold;
-  }
-
-  #infowindow-content {
-    display: none;
-  }
-
-  #map #infowindow-content {
-    display: inline;
-  }
-
-  .pac-card {
-    margin: 10px 10px 0 0;
-    border-radius: 2px 0 0 2px;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    outline: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    background-color: #fff;
-  }
-
-  #pac-container {
-    padding-bottom: 12px;
-    margin-right: 12px;
-  }
-
-  .pac-controls {
-    display: inline-block;
-    padding: 5px 11px;
-  }
-
-  .pac-controls label {
-    font-size: 13px;
-    font-weight: 300;
-  }
-
-  #pac-input {
-    background-color: #fff;
-    font-size: 15px;
-    font-weight: 300;
-    margin-left: 12px;
-    padding: 0 11px 0 13px;
-    text-overflow: ellipsis;
-    width: 400px;
-  }
-
-  #pac-input:focus {
-    border-color: #4d90fe;
-  }
-
-  #title {
-    color: #fff;
-    background-color: #4d90fe;
-    font-size: 25px;
-    font-weight: 500;
-    padding: 6px 12px;
-  }
-
-  #target {
-    width: 345px;
-  }
-</style>
